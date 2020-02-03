@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shelved.Data;
 using Shelved.Models;
+using Shelved.Models.ViewModels;
 
 namespace Shelved.Controllers
 {
@@ -59,9 +60,13 @@ namespace Shelved.Controllers
         }
 
         // GET: Movies/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var user = await GetCurrentUserAsync();
+
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
+            ViewData["GenresForMovies"] = new SelectList(_context.GenresForMovie, "Id", "Description");
+
             return View();
         }
 
@@ -70,16 +75,41 @@ namespace Shelved.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds")] MovieViewModel movieViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
+                var user = await GetCurrentUserAsync();
+
+                // Add movie to database
+                var movieModel = new Movie
+                {
+                    Title = movieViewModel.Title,
+                    Year = movieViewModel.Year,
+                    IsWatched = movieViewModel.IsWatched,
+                    ImagePath = movieViewModel.ImagePath,
+                    ApplicationUserId = user.Id
+                };
+
+                _context.Add(movieModel);
                 await _context.SaveChangesAsync();
+
+                // Add genres to movie
+                movieModel.MovieGenres = movieViewModel.GenreIds.Select(genreId => new MovieGenre
+                {
+                    MovieId = movieModel.Id,
+                    GenreId = genreId
+                }).ToList();
+
+                // Save again to database
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", movie.ApplicationUserId);
-            return View(movie);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", movieViewModel.ApplicationUserId);
+            ViewData["GenresForMovies"] = new SelectList(_context.GenresForMovie, "Id", "Description", movieViewModel.GenreIds);
+
+            return View(movieViewModel);
         }
 
         // GET: Movies/Edit/5
