@@ -57,7 +57,7 @@ namespace Shelved.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Artist,Year,Heard,ImagePath")] CD cD)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath")] CD cD)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace Shelved.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Artist,Year,Heard,ImagePath")] CD cD)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath")] CD cD)
         {
             if (id != cD.Id)
             {

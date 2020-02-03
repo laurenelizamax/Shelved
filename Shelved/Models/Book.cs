@@ -14,6 +14,8 @@ namespace Shelved.Models
         public ApplicationUser ApplicationUser { get; set; }
         public string Author { get; set; }
         public string Year { get; set; }
+
+        [Display(Name = "I've Read This")]
         public bool IsRead { get; set; }
         public string ImagePath { get; set; }
 
