@@ -21,5 +21,7 @@ namespace Shelved.Models.ViewModels
 
         [Display(Name = "Genres")]
         public List<int> GenreIds { get; set; }
+        public GenresForCDs GenresForCDs { get; set; }
+
     }
 }

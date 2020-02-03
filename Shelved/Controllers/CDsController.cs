@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shelved.Data;
 using Shelved.Models;
+using Shelved.Models.ViewModels;
 
 namespace Shelved.Controllers
 {
@@ -58,9 +59,13 @@ namespace Shelved.Controllers
         }
 
         // GET: CDs/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
+            var user = await GetCurrentUserAsync();
+
+           ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
+            ViewData["GenresForCDs"] = new SelectList(_context.GetGenresForCD, "Id", "Description");
+
             return View();
         }
 
@@ -69,16 +74,42 @@ namespace Shelved.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath")] CD cD)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds")] CDViewModel cdViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cD);
+                var user = await GetCurrentUserAsync();
+
+                // Add CD to database
+                var cdModel = new CD
+                {
+                    Title = cdViewModel.Title,
+                    Artist = cdViewModel.Artist,
+                    Year = cdViewModel.Year,
+                    IsHeard = cdViewModel.IsHeard,
+                    ImagePath = cdViewModel.ImagePath,
+                    ApplicationUserId = user.Id
+                };
+
+                _context.Add(cdModel);
                 await _context.SaveChangesAsync();
+
+                // Add genres to CD
+                cdModel.CDGenres = cdViewModel.GenreIds.Select(genreId => new CDGenre
+                {
+                    CDId = cdModel.Id,
+                    GenreId = genreId
+                }).ToList();
+
+                // Save again to database
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cD.ApplicationUserId);
-            return View(cD);
+           
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cdViewModel.ApplicationUserId);
+            ViewData["GenresForCDs"] = new SelectList(_context.GetGenresForCD, "Id", "Description", cdViewModel.GenreIds);
+            return View(cdViewModel);
         }
 
         // GET: CDs/Edit/5
