@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,20 +12,28 @@ using Shelved.Models;
 
 namespace Shelved.Controllers
 {
+    [Authorize]
     public class CDsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CDsController(ApplicationDbContext context)
+        public CDsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: CDs
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.CD.Include(c => c.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await GetCurrentUserAsync();
+
+            var cds = _context.CD.Include(c => c.ApplicationUser)
+                .Where(c => c.ApplicationUserId == user.Id)
+                .Include(c => c.CDGenres)
+                .ThenInclude(cg => cg.GenresForCDs);
+            return View(await cds.ToListAsync());
         }
 
         // GET: CDs/Details/5
@@ -36,6 +46,8 @@ namespace Shelved.Controllers
 
             var cD = await _context.CD
                 .Include(c => c.ApplicationUser)
+                .Include(c => c.CDGenres)
+                .ThenInclude(cg => cg.GenresForCDs)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cD == null)
             {
@@ -156,5 +168,6 @@ namespace Shelved.Controllers
         {
             return _context.CD.Any(e => e.Id == id);
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
 }

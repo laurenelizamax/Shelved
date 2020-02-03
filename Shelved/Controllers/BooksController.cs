@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,20 +12,30 @@ using Shelved.Models;
 
 namespace Shelved.Controllers
 {
+    [Authorize]
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BooksController(ApplicationDbContext context)
+
+        public BooksController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Book.Include(b => b.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await GetCurrentUserAsync();
+
+            var books = _context.Book
+                .Include(b => b.ApplicationUser)
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.GenresForBooks)
+                .Where(b => b.ApplicationUserId == user.Id);
+            return View(await books.ToListAsync());
         }
 
         // GET: Books/Details/5
@@ -36,6 +48,8 @@ namespace Shelved.Controllers
 
             var book = await _context.Book
                 .Include(b => b.ApplicationUser)
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.GenresForBooks)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -156,5 +170,7 @@ namespace Shelved.Controllers
         {
             return _context.Book.Any(e => e.Id == id);
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
     }
 }

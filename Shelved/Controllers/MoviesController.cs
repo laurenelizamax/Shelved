@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,19 +12,28 @@ using Shelved.Models;
 
 namespace Shelved.Controllers
 {
+    [Authorize]
     public class MoviesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MoviesController(ApplicationDbContext context)
+        public MoviesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Movie.Include(m => m.ApplicationUser);
+            var user = await GetCurrentUserAsync();
+
+            var applicationDbContext = _context.Movie
+                .Include(m => m.ApplicationUser)
+                .Include(m => m.MovieGenres)
+                .ThenInclude(mg => mg.GenresForMovies)
+                               .Where(b => b.ApplicationUserId == user.Id);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,6 +47,8 @@ namespace Shelved.Controllers
 
             var movie = await _context.Movie
                 .Include(m => m.ApplicationUser)
+                .Include(m => m.MovieGenres)
+                .ThenInclude(mg => mg.GenresForMovies)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
@@ -156,5 +169,7 @@ namespace Shelved.Controllers
         {
             return _context.Movie.Any(e => e.Id == id);
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
     }
 }
