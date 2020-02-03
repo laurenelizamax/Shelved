@@ -223,106 +223,106 @@ namespace Shelved.Data
                 });
 
 
-            //// create books
-            //Book book1 = new Book()
-            //{
-            //    Id = 1,
-            //    Title = "One For The Money",
-            //    Author = "Janet Evanovich",
-            //    Year = "1994",
-            //    IsRead = true,
-            //    ApplicationUserId = user.Id
-            //};
-            //modelBuilder.Entity<Book>().HasData(book1);
+            // create books
+            Book book1 = new Book()
+            {
+                Id = 1,
+                Title = "One For The Money",
+                Author = "Janet Evanovich",
+                Year = "1994",
+                IsRead = true,
+                ApplicationUserId = user.Id
+            };
+            modelBuilder.Entity<Book>().HasData(book1);
 
-            //Book book2 = new Book()
-            //{
-            //    Id = 2,
-            //    Title = "Fever Pitch",
-            //    Author = "Nick Hornby",
-            //    Year = "1992",
-            //    IsRead = true,
-            //    ApplicationUserId = user.Id
-            //};
-            //modelBuilder.Entity<Book>().HasData(book2);
+            Book book2 = new Book()
+            {
+                Id = 2,
+                Title = "Fever Pitch",
+                Author = "Nick Hornby",
+                Year = "1992",
+                IsRead = true,
+                ApplicationUserId = user.Id
+            };
+            modelBuilder.Entity<Book>().HasData(book2);
 
-            //Book book3 = new Book()
-            //{
-            //    Id = 3,
-            //    Title = "The Code of the Woosters",
-            //    Author = "P.G. Wodehouse",
-            //    Year = "1938",
-            //    IsRead = true,
-            //    ApplicationUserId = user.Id
-            //};
-            //modelBuilder.Entity<Book>().HasData(book3);
-
-
-            //// create movies
-            //Movie movie1 = new Movie()
-            //{
-            //    Id = 1,
-            //    Title = "Dr. Doolittle",
-            //    Year = "2020",
-            //    IsWatched = true,
-            //    ApplicationUserId = user.Id
-            //};
-            //modelBuilder.Entity<Movie>().HasData(movie1);
-
-            //Movie movie2 = new Movie()
-            //{
-            //    Id = 2,
-            //    Title = "Captain America",
-            //    Year = "2011",
-            //    IsWatched = true,
-            //    ApplicationUserId = user.Id
-            //};
-            //modelBuilder.Entity<Movie>().HasData(movie2);
-
-            //Movie movie3 = new Movie()
-            //{
-            //    Id = 3,
-            //    Title = "Big Business",
-            //    Year = "1988",
-            //    IsWatched = true,
-            //    ApplicationUserId = user.Id
-            //};
-            //modelBuilder.Entity<Movie>().HasData(movie3);
+            Book book3 = new Book()
+            {
+                Id = 3,
+                Title = "The Code of the Woosters",
+                Author = "P.G. Wodehouse",
+                Year = "1938",
+                IsRead = true,
+                ApplicationUserId = user.Id
+            };
+            modelBuilder.Entity<Book>().HasData(book3);
 
 
-            //// create cds
-            //CD cd1 = new CD()
-            //{
-            //    Id = 1,
-            //    Title = "Sheryl Crow",
-            //    Artist = "Sheryl Crow",
-            //    Year = "1996",
-            //    IsHeard = true,
-            //    ApplicationUserId = user.Id
-            //};
-            //modelBuilder.Entity<CD>().HasData(cd1);
+            // create movies
+            Movie movie1 = new Movie()
+            {
+                Id = 1,
+                Title = "Dr. Doolittle",
+                Year = "2020",
+                IsWatched = true,
+                ApplicationUserId = user.Id
+            };
+            modelBuilder.Entity<Movie>().HasData(movie1);
 
-            //CD cd2 = new CD()
-            //{
-            //    Id = 2,
-            //    Title = "Americana",
-            //    Artist = "The Offspring",
-            //    Year = "1998",
-            //    IsHeard = true,
-            //    ApplicationUserId = user.Id
-            //};
-            //modelBuilder.Entity<CD>().HasData(cd2);
+            Movie movie2 = new Movie()
+            {
+                Id = 2,
+                Title = "Captain America",
+                Year = "2011",
+                IsWatched = true,
+                ApplicationUserId = user.Id
+            };
+            modelBuilder.Entity<Movie>().HasData(movie2);
 
-            //CD cd3 = new CD()
-            //{
-            //    Id = 3,
-            //    Title = "In Your Honor",
-            //    Artist = "Foo Fighters",
-            //    Year = "2005",
-            //    IsHeard = true,
-            //    ApplicationUserId = user.Id
-            //};
-            //modelBuilder.Entity<CD>().HasData(cd3);
+            Movie movie3 = new Movie()
+            {
+                Id = 3,
+                Title = "Big Business",
+                Year = "1988",
+                IsWatched = true,
+                ApplicationUserId = user.Id
+            };
+            modelBuilder.Entity<Movie>().HasData(movie3);
+
+
+            // create cds
+            CD cd1 = new CD()
+            {
+                Id = 1,
+                Title = "Sheryl Crow",
+                Artist = "Sheryl Crow",
+                Year = "1996",
+                IsHeard = true,
+                ApplicationUserId = user.Id
+            };
+            modelBuilder.Entity<CD>().HasData(cd1);
+
+            CD cd2 = new CD()
+            {
+                Id = 2,
+                Title = "Americana",
+                Artist = "The Offspring",
+                Year = "1998",
+                IsHeard = true,
+                ApplicationUserId = user.Id
+            };
+            modelBuilder.Entity<CD>().HasData(cd2);
+
+            CD cd3 = new CD()
+            {
+                Id = 3,
+                Title = "In Your Honor",
+                Artist = "Foo Fighters",
+                Year = "2005",
+                IsHeard = true,
+                ApplicationUserId = user.Id
+            };
+            modelBuilder.Entity<CD>().HasData(cd3);
 
 
         }

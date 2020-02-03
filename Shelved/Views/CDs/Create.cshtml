@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create Music</h1>
 
 <h4>CD</h4>
 <hr />
@@ -18,10 +18,6 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ApplicationUserId" class="control-label"></label>
-                <select asp-for="ApplicationUserId" class ="form-control" asp-items="ViewBag.ApplicationUserId"></select>
-            </div>
-            <div class="form-group">
                 <label asp-for="Artist" class="control-label"></label>
                 <input asp-for="Artist" class="form-control" />
                 <span asp-validation-for="Artist" class="text-danger"></span>
@@ -33,7 +29,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Heard" /> @Html.DisplayNameFor(model => model.Heard)
+                    <input class="form-check-input" asp-for="IsHeard" /> @Html.DisplayNameFor(model => model.IsHeard)
                 </label>
             </div>
             <div class="form-group">

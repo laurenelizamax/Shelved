@@ -13,6 +13,8 @@ namespace Shelved.Models
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public string Year { get; set; }
+
+        [Display(Name = "I've Watched This")]
         public bool IsWatched { get; set; }
         public string ImagePath { get; set; }
 
