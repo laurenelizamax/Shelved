@@ -43,14 +43,14 @@
         <h6>
             Genres
         </h6>
-        @*<td>
-            @foreach (var bookGenre in item.BookGenres)
+        <td>
+            @foreach (var item in Model.BookGenres)
             {
                 <div>
-                    @Html.DisplayFor(modelItem => bookGenre.Genre.Description)
+                    @Html.DisplayFor(modelItem => item.GenresForBooks.Description)
                 </div>
             }
-        </td>*@
+        </td>
     </dl>
 
 </div>

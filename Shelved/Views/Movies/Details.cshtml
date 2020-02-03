@@ -35,17 +35,18 @@
             @Html.DisplayFor(model => model.ImagePath)
         </dd>
         <h6>
-            Genres
-        </h6>
-        @*<td>
-            @foreach (var bookGenre in item.BookGenres)
-            {
-                <div>
-                    @Html.DisplayFor(modelItem => bookGenre.Genre.Description)
-                </div>
-            }
-        </td>*@
-    </dl>
+            <h6>
+                Genres
+            </h6>
+            <td>
+                @foreach (var item in Model.MovieGenres)
+                {
+                    <div>
+                        @Html.DisplayFor(modelItem => item.GenresForMovies.Description)
+                    </div>
+                }
+            </td>
+</dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
