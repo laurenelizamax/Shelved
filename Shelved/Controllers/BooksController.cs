@@ -174,6 +174,8 @@ namespace Shelved.Controllers
 
             var book = await _context.Book
                 .Include(b => b.ApplicationUser)
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.GenresForBooks)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -188,7 +190,14 @@ namespace Shelved.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Book.FindAsync(id);
+            var book = await _context.Book
+                .Include(b => b.BookGenres)
+                .FirstOrDefaultAsync(b => b.Id == id);
+            foreach (var item in book.BookGenres)
+            {
+                _context.BookGenre.Remove(item);
+
+            }
             _context.Book.Remove(book);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

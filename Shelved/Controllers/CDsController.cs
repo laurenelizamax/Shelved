@@ -63,7 +63,7 @@ namespace Shelved.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-           ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
             ViewData["GenresForCDs"] = new SelectList(_context.GetGenresForCD, "Id", "Description");
 
             return View();
@@ -106,7 +106,7 @@ namespace Shelved.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-           
+
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cdViewModel.ApplicationUserId);
             ViewData["GenresForCDs"] = new SelectList(_context.GetGenresForCD, "Id", "Description", cdViewModel.GenreIds);
             return View(cdViewModel);
@@ -175,6 +175,8 @@ namespace Shelved.Controllers
 
             var cD = await _context.CD
                 .Include(c => c.ApplicationUser)
+                .Include(c => c.CDGenres)
+                .ThenInclude(cg => cg.GenresForCDs)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cD == null)
             {
@@ -189,7 +191,14 @@ namespace Shelved.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cD = await _context.CD.FindAsync(id);
+            var cD = await _context.CD
+                .Include(c => c.CDGenres)
+             .FirstOrDefaultAsync(c => c.Id == id);
+            foreach (var item in cD.CDGenres)
+            {
+                _context.CdGenre.Remove(item);
+
+            }
             _context.CD.Remove(cD);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
