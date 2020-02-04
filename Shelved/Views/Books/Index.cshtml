@@ -9,11 +9,12 @@
 <a asp-action="Index">Wish List</a> |
 <a asp-action="Index">Read List</a> |
 <a asp-action="Index">Read That</a> |
-<p>
-    Search Books By Title, Author, or Genre: <input type="text" name="SearchBook">
-    <input type="submit" value="Search" />
-</p>
 
+<form asp-action="Index" asp-controller="Books">
+    <label>Search Books by Title or Author: </label>
+    <input name="searchBooks" type="text" />
+    <input class="btn btn-success" type="submit" value="Search" />
+</form>
 
 <p>
     <a asp-action="Create">Create New</a>

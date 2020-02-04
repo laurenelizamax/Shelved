@@ -26,17 +26,31 @@ namespace Shelved.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchMovies)
         {
             var user = await GetCurrentUserAsync();
 
-            var applicationDbContext = _context.Movie
+
+            if (searchMovies == null)
+            {
+                var movies = _context.Movie
                 .Include(m => m.ApplicationUser)
                 .Include(m => m.MovieGenres)
                 .ThenInclude(mg => mg.GenresForMovies)
                                .Where(b => b.ApplicationUserId == user.Id);
-            return View(await applicationDbContext.ToListAsync());
+                return View(await movies.ToListAsync());
+            }
+            else
+            {
+                var movies = _context.Movie
+               .Where(m => m.Title.Contains(searchMovies) || m.Year.Contains(searchMovies))
+               //.Include(m => m.ApplicationUser == user.Id)
+               .Include(m => m.MovieGenres)
+               .ThenInclude(mg => mg.GenresForMovies);
+                return View(await movies.ToListAsync());
+            }
         }
+
 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)

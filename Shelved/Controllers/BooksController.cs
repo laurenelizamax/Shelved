@@ -27,17 +27,30 @@ namespace Shelved.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchBooks)
         {
             var user = await GetCurrentUserAsync();
 
-            var books = _context.Book
-                .Include(b => b.ApplicationUser)
+            if (searchBooks == null)
+            {
+                var books = _context.Book
+             .Include(b => b.BookGenres)
+             .ThenInclude(bg => bg.GenresForBooks)
+             .Where(b => b.ApplicationUserId == user.Id);
+                return View(await books.ToListAsync());
+            }
+            else
+            {
+                var books = _context.Book
+                .Where(b => b.Title.Contains(searchBooks) || b.Author.Contains(searchBooks))
+                //.Include(b => b.ApplicationUserId == user.Id)
                 .Include(b => b.BookGenres)
-                .ThenInclude(bg => bg.GenresForBooks)
-                .Where(b => b.ApplicationUserId == user.Id);
-            return View(await books.ToListAsync());
+                .ThenInclude(bg => bg.GenresForBooks);
+                
+                return View(await books.ToListAsync());
+            }
         }
+
 
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
