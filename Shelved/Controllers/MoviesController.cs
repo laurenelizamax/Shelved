@@ -71,8 +71,6 @@ namespace Shelved.Controllers
         }
 
         // POST: Movies/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds")] MovieViewModel movieViewModel)
@@ -129,9 +127,7 @@ namespace Shelved.Controllers
             return View(movie);
         }
 
-        // POST: Movies/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Movies/Edit/5       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath")] Movie movie)
@@ -175,6 +171,8 @@ namespace Shelved.Controllers
 
             var movie = await _context.Movie
                 .Include(m => m.ApplicationUser)
+                .Include(m => m.MovieGenres)
+                .ThenInclude(mg => mg.GenresForMovies)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
@@ -189,7 +187,14 @@ namespace Shelved.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movie.FindAsync(id);
+            var movie = await _context.Movie
+                .Include(m => m.MovieGenres)
+                 .FirstOrDefaultAsync(m => m.Id == id);
+            foreach (var item in movie.MovieGenres)
+            {
+                _context.MovieGenre.Remove(item);
+
+            }
             _context.Movie.Remove(movie);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

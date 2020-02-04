@@ -114,42 +114,80 @@ namespace Shelved.Controllers
         // GET: Books/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var user = await GetCurrentUserAsync();
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var book = await _context.Book.FindAsync(id);
+            var book = await _context.Book
+                .Include(b => b.BookGenres)
+                 .ThenInclude(bg => bg.GenresForBooks)
+                .FirstOrDefaultAsync(b => b.Id == id);
             if (book == null)
             {
                 return NotFound();
             }
+
+            var bookViewModel = new BookViewModel
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Author = book.Author,
+                Year = book.Year,
+                IsRead = book.IsRead,
+                ImagePath = book.ImagePath,
+                ApplicationUserId = user.Id,
+                GenreIds = book.BookGenres.Select(bg => bg.GenreId).ToList()
+            };
+            
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", book.ApplicationUserId);
-            return View(book);
+            ViewData["GenresForBooks"] = new SelectList(_context.GenresForBook, "Id", "Description", bookViewModel.GenreIds);
+
+            return View(bookViewModel);
         }
 
         // POST: Books/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds")] BookViewModel bookViewModel)
         {
-            if (id != book.Id)
+            var user = await GetCurrentUserAsync();
+
+            if (id != bookViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var bookModel = await _context.Book
+                    .Include(b => b.BookGenres)
+                    .FirstOrDefaultAsync(b => b.Id == id);
+
+                bookModel.Id = bookViewModel.Id;
+                bookModel.Title = bookViewModel.Title;
+                bookModel.Author = bookViewModel.Author;
+                bookModel.Year = bookViewModel.Year;
+                bookModel.IsRead = bookViewModel.IsRead;
+                bookModel.ImagePath = bookViewModel.ImagePath;
+                bookModel.ApplicationUserId = user.Id;
+
+                bookModel.BookGenres = bookViewModel.GenreIds.Select(gid => new BookGenre
+                {
+                    BookId = bookViewModel.Id,
+                    GenreId = gid
+                }).ToList();
+
                 try
                 {
-                    _context.Update(book);
+                    _context.Update(bookModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookExists(book.Id))
+                    if (!BookExists(bookViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -160,8 +198,10 @@ namespace Shelved.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", book.ApplicationUserId);
-            return View(book);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", bookViewModel.ApplicationUserId);
+            ViewData["GenresForBooks"] = new SelectList(_context.GenresForBook, "Id", "Description", bookViewModel.GenreIds);
+
+            return View(bookViewModel);
         }
 
         // GET: Books/Delete/5
@@ -174,6 +214,8 @@ namespace Shelved.Controllers
 
             var book = await _context.Book
                 .Include(b => b.ApplicationUser)
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.GenresForBooks)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -188,7 +230,14 @@ namespace Shelved.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Book.FindAsync(id);
+            var book = await _context.Book
+                .Include(b => b.BookGenres)
+                .FirstOrDefaultAsync(b => b.Id == id);
+            foreach (var item in book.BookGenres)
+            {
+                _context.BookGenre.Remove(item);
+
+            }
             _context.Book.Remove(book);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
