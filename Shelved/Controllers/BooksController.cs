@@ -138,6 +138,7 @@ namespace Shelved.Controllers
                 Year = book.Year,
                 IsRead = book.IsRead,
                 ImagePath = book.ImagePath,
+                ApplicationUserId = user.Id,
                 GenreIds = book.BookGenres.Select(bg => bg.GenreId).ToList()
             };
             
@@ -162,7 +163,6 @@ namespace Shelved.Controllers
             if (ModelState.IsValid)
             {
                 var bookModel = await _context.Book
-                    //.Include(b => b.ApplicationUserId == user.Id)
                     .Include(b => b.BookGenres)
                     .FirstOrDefaultAsync(b => b.Id == id);
 
@@ -172,7 +172,7 @@ namespace Shelved.Controllers
                 bookModel.Year = bookViewModel.Year;
                 bookModel.IsRead = bookViewModel.IsRead;
                 bookModel.ImagePath = bookViewModel.ImagePath;
-                bookModel.ApplicationUser = bookViewModel.ApplicationUser;
+                bookModel.ApplicationUserId = user.Id;
 
                 bookModel.BookGenres = bookViewModel.GenreIds.Select(gid => new BookGenre
                 {
