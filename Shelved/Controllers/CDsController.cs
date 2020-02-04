@@ -26,16 +26,29 @@ namespace Shelved.Controllers
         }
 
         // GET: CDs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchMusic)
         {
             var user = await GetCurrentUserAsync();
 
-            var cds = _context.CD.Include(c => c.ApplicationUser)
-                .Where(c => c.ApplicationUserId == user.Id)
+            if (searchMusic == null)
+            {
+                var cds = _context.CD
+              .Where(c => c.ApplicationUserId == user.Id)
+              .Include(c => c.CDGenres)
+              .ThenInclude(cg => cg.GenresForCDs);
+                return View(await cds.ToListAsync());
+            }
+            else
+            {
+                var cds = _context.CD
+                .Where(c => c.Title.Contains(searchMusic) || c.Artist.Contains(searchMusic))
+                //.Where(c => c.ApplicationUserId == user.Id)
                 .Include(c => c.CDGenres)
                 .ThenInclude(cg => cg.GenresForCDs);
-            return View(await cds.ToListAsync());
+                return View(await cds.ToListAsync());
+            }
         }
+
 
         // GET: CDs/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -124,7 +137,7 @@ namespace Shelved.Controllers
                 .Include(c => c.CDGenres)
                  .ThenInclude(cg => cg.GenresForCDs)
                 .FirstOrDefaultAsync(c => c.Id == id);
-            
+
             if (cD == null)
             {
                 return NotFound();
