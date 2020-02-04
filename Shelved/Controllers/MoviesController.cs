@@ -37,20 +37,69 @@ namespace Shelved.Controllers
                 .Include(m => m.ApplicationUser)
                 .Include(m => m.MovieGenres)
                 .ThenInclude(mg => mg.GenresForMovies)
-                               .Where(b => b.ApplicationUserId == user.Id);
+                               .Where(m => m.MyMovies == true && m.ApplicationUserId == user.Id);
                 return View(await movies.ToListAsync());
             }
             else
             {
                 var movies = _context.Movie
-               .Where(m => m.Title.Contains(searchMovies) || m.Year.Contains(searchMovies))
-               //.Include(m => m.ApplicationUser == user.Id)
+               .Where(m => m.MyMovies == true && m.ApplicationUserId == user.Id 
+               && m.Title.Contains(searchMovies) || m.Year.Contains(searchMovies))
                .Include(m => m.MovieGenres)
                .ThenInclude(mg => mg.GenresForMovies);
                 return View(await movies.ToListAsync());
             }
         }
 
+
+        // GET: Wish List Movies
+        public async Task<IActionResult> WishList()
+        {
+            var user = await GetCurrentUserAsync();
+
+                var movies = _context.Movie
+                .Include(m => m.MovieGenres)
+                .ThenInclude(mg => mg.GenresForMovies)
+                .Where(m => m.ApplicationUserId == user.Id && m.WishList == true);
+                return View(await movies.ToListAsync());
+        }
+
+        // GET: Watch List Movies
+        public async Task<IActionResult> WatchList()
+        {
+            var user = await GetCurrentUserAsync();
+
+            var movies = _context.Movie
+            .Include(m => m.MovieGenres)
+            .ThenInclude(mg => mg.GenresForMovies)
+            .Where(m => m.ApplicationUserId == user.Id && m.WatchList == true);
+            return View(await movies.ToListAsync());
+        }
+
+
+        //// GET: Movies
+        //public async Task<IActionResult> WishList(MoviesWishListViewModel moviesWishListView)
+        //{
+        //    var user = await GetCurrentUserAsync();
+
+        //    var moviesWishListView = new MoviesWishListViewModel
+        //    {
+        //        Id = moviesWishListView.Id,
+        //        Title = moviesWishListView.Title,
+        //        Year = moviesWis.Year,
+        //        IsWatched = movie.IsWatched,
+        //        ImagePath = movie.ImagePath,
+        //        ApplicationUserId = user.Id,
+        //        GenreIds = movie.MovieGenres.Select(mg => mg.GenreId).ToList()
+        //    };
+
+        //         .Include(m => m.ApplicationUser)
+        //        .Include(m => m.MovieGenres)
+        //        .ThenInclude(mg => mg.GenresForMovies)
+        //                       .Where(b => b.ApplicationUserId == user.Id);
+        //    return View(await moviesWishListView.ToListAsync());
+
+        //}
 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)

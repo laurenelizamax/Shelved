@@ -20,5 +20,17 @@ namespace Shelved.Models
 
         [Display(Name = "Genres")]
         public List<MovieGenre> MovieGenres { get; set; }
+
+        [Display(Name = "Add To My Movies")]
+        public bool MyMovies { get; set; }
+
+        [Display(Name = "Add To Watch List")]
+        public bool WatchList { get; set; }
+
+        [Display(Name = "Add To Wish List")]
+        public bool WishList { get; set; }
+
+        [Display(Name = "Add To Seen List")]
+        public bool SeenList { get; set; }
     }
 }

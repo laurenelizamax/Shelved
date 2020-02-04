@@ -22,5 +22,17 @@ namespace Shelved.Models
         [Display(Name = "Genres")]
         public List<BookGenre> BookGenres { get; set; }
 
+        [Display(Name = "Add To My Books")]
+        public bool MyBooks { get; set; }
+
+        [Display(Name = "Add To Read List")]
+        public bool ReadList { get; set; }
+
+        [Display(Name = "Add To Wish List")]
+        public bool WishList { get; set; }
+
+        [Display(Name = "Add To Read It List")]
+        public bool ReadItList { get; set; }
+
     }
 }

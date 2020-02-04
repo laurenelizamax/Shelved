@@ -21,5 +21,17 @@ namespace Shelved.Models
 
         [Display(Name = "Genres")]
         public List<CDGenre> CDGenres { get; set; }
+
+        [Display(Name = "Add To My Music")]
+        public bool MyMusic { get; set; }
+
+        [Display(Name = "Add To List List")]
+        public bool ListenList { get; set; }
+
+        [Display(Name = "Add To Wish List")]
+        public bool WishList { get; set; }
+
+        [Display(Name = "Add To Heard It List")]
+        public bool HeardList { get; set; }
     }
 }
