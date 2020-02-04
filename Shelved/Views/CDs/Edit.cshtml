@@ -1,4 +1,4 @@
-﻿@model Shelved.Models.CD
+﻿@model Shelved.Models.ViewModels.CDViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -37,6 +37,10 @@
                 <label asp-for="ImagePath" class="control-label"></label>
                 <input asp-for="ImagePath" class="form-control" />
                 <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenreIds" class="control-label"></label>
+                <select multiple asp-for="GenreIds" class="form-control" asp-items="ViewBag.GenresForCDs"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

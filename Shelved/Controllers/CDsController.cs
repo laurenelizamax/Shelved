@@ -113,40 +113,82 @@ namespace Shelved.Controllers
         // GET: CDs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var user = await GetCurrentUserAsync();
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var cD = await _context.CD.FindAsync(id);
+            var cD = await _context.CD
+                .Include(c => c.CDGenres)
+                 .ThenInclude(cg => cg.GenresForCDs)
+                .FirstOrDefaultAsync(c => c.Id == id);
+            
             if (cD == null)
             {
                 return NotFound();
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cD.ApplicationUserId);
-            return View(cD);
+            var cDViewModel = new CDViewModel
+            {
+                Id = cD.Id,
+                Title = cD.Title,
+                Artist = cD.Artist,
+                Year = cD.Year,
+                IsHeard = cD.IsHeard,
+                ImagePath = cD.ImagePath,
+                ApplicationUserId = user.Id,
+                GenreIds = cD.CDGenres.Select(bg => bg.GenreId).ToList()
+            };
+
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cDViewModel.ApplicationUserId);
+            ViewData["GenresForCDs"] = new SelectList(_context.GetGenresForCD, "Id", "Description", cDViewModel.GenreIds);
+
+            return View(cDViewModel);
         }
 
         // POST: CDs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath")] CD cD)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds")] CDViewModel cDViewModel)
         {
-            if (id != cD.Id)
+            var user = await GetCurrentUserAsync();
+
+            if (id != cDViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+
+                var cDModel = await _context.CD
+                  .Include(c => c.CDGenres)
+                  .FirstOrDefaultAsync(c => c.Id == id);
+
+                cDModel.Id = cDViewModel.Id;
+                cDModel.Title = cDViewModel.Title;
+                cDModel.Artist = cDViewModel.Artist;
+                cDModel.Year = cDViewModel.Year;
+                cDModel.IsHeard = cDViewModel.IsHeard;
+                cDModel.ImagePath = cDViewModel.ImagePath;
+                cDModel.ApplicationUserId = user.Id;
+
+                cDModel.CDGenres = cDViewModel.GenreIds.Select(gid => new CDGenre
+                {
+                    CDId = cDViewModel.Id,
+                    GenreId = gid
+                }).ToList();
+
+
                 try
                 {
-                    _context.Update(cD);
+                    _context.Update(cDModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CDExists(cD.Id))
+                    if (!CDExists(cDViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -157,8 +199,10 @@ namespace Shelved.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cD.ApplicationUserId);
-            return View(cD);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", cDViewModel.ApplicationUserId);
+            ViewData["GenresForCDs"] = new SelectList(_context.GetGenresForCD, "Id", "Description", cDViewModel.GenreIds);
+
+            return View(cDViewModel);
         }
 
         // GET: CDs/Delete/5

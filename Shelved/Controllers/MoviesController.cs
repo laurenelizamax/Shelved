@@ -113,40 +113,79 @@ namespace Shelved.Controllers
         // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var user = await GetCurrentUserAsync();
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FindAsync(id);
+            var movie = await _context.Movie
+                .Include(m => m.MovieGenres)
+                 .ThenInclude(mg => mg.GenresForMovies)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
             {
                 return NotFound();
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", movie.ApplicationUserId);
-            return View(movie);
+
+            var movieViewModel = new MovieViewModel
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Year = movie.Year,
+                IsWatched = movie.IsWatched,
+                ImagePath = movie.ImagePath,
+                ApplicationUserId = user.Id,
+                GenreIds = movie.MovieGenres.Select(mg => mg.GenreId).ToList()
+            };
+
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", movieViewModel.ApplicationUserId);
+            ViewData["GenresForMovies"] = new SelectList(_context.GenresForMovie, "Id", "Description", movieViewModel.GenreIds);
+
+            return View(movieViewModel);
         }
 
         // POST: Movies/Edit/5       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds")] MovieViewModel movieViewModel)
         {
-            if (id != movie.Id)
+            var user = await GetCurrentUserAsync();
+
+            if (id != movieViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var movieModel = await _context.Movie
+                   .Include(m => m.MovieGenres)
+                   .FirstOrDefaultAsync(b => b.Id == id);
+
+                movieModel.Id = movieViewModel.Id;
+                movieModel.Title = movieViewModel.Title;
+                movieModel.Year = movieViewModel.Year;
+                movieModel.IsWatched = movieViewModel.IsWatched;
+                movieModel.ImagePath = movieViewModel.ImagePath;
+                movieModel.ApplicationUserId = user.Id;
+
+                movieModel.MovieGenres = movieViewModel.GenreIds.Select(gid => new MovieGenre
+                {
+                    MovieId = movieViewModel.Id,
+                    GenreId = gid
+                }).ToList();
+
                 try
                 {
-                    _context.Update(movie);
+                    _context.Update(movieModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!MovieExists(movieViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -157,8 +196,10 @@ namespace Shelved.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", movie.ApplicationUserId);
-            return View(movie);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", movieViewModel.ApplicationUserId);
+            ViewData["GenresForMovies"] = new SelectList(_context.GenresForMovie, "Id", "Description", movieViewModel.GenreIds);
+
+            return View(movieViewModel);
         }
 
         // GET: Movies/Delete/5

@@ -4,7 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Movies</h1>
+<h1>My Movies</h1>
+
+<a asp-action="Index">Wish List</a> |
+<a asp-action="Index">Watch List</a> |
+<a asp-action="Index">Seen That</a>
+
+<p>
+    Search Books By Title or Genre: <input type="text" name="SearchBook">
+    <input type="submit" value="Search" />
+</p>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -26,38 +35,39 @@
             </th>
             <th>
                 Genres
-            </th>       
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsWatched)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
-            </td>
-            <td>
-                @foreach (var genre in item.MovieGenres)
-                {
-                    <div>
-                        @Html.DisplayFor(modelItem => genre.GenresForMovies.Description)
-                    </div>
-                }
-            </td>
-            <td>
-                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsWatched)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagePath)
+                </td>
+                <td>
+                    @foreach (var genre in item.MovieGenres)
+                    {
+                        <div>
+                            @Html.DisplayFor(modelItem => genre.GenresForMovies.Description)
+                        </div>
+                    }
+                </td>
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
