@@ -4,7 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Music</h1>
+<h1>My Music</h1>
+
+<a asp-action="Index">Wish List</a> |
+<a asp-action="Index">Watch List</a> |
+<a asp-action="Index">Heard That</a>
+
+<p>
+    Search Books By Title, Artist, or Genre: <input type="text" name="SearchBook">
+    <input type="submit" value="Search" />
+</p>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -33,37 +42,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Artist)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsHeard)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
-            </td>
-            <td>
-                @foreach (var genre in item.CDGenres)
-                {
-                    <div>
-                        @Html.DisplayFor(modelItem => genre.GenresForCDs.Description)
-                    </div>
-                }
-            </td>
-            <td>
-                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Artist)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsHeard)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagePath)
+                </td>
+                <td>
+                    @foreach (var genre in item.CDGenres)
+                    {
+                        <div>
+                            @Html.DisplayFor(modelItem => genre.GenresForCDs.Description)
+                        </div>
+                    }
+                </td>
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
