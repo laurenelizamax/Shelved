@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shelved.Data;
 
 namespace Shelved.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200204205458_addedMyProperty")]
+    partial class addedMyProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -740,13 +742,13 @@ namespace Shelved.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e6f37830-041f-43c7-b494-9e8ce57665ec",
+                            ConcurrencyStamp = "5de58abc-8d60-4c0c-a788-35d13ae70f23",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA6+F9fZLI1l2poLZ+o1EEJ3cNEmaQwQCRUn9tn4lGM2VYM8oMTjt1kkiXJv/F8bzg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMcaZoUVMKCVtAqgay9KaySXQmkJ0LBx4leMWAb9YQqTCBubQKXAaPjdjaXOEtRNVQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,

@@ -37,18 +37,55 @@ namespace Shelved.Controllers
                 .Include(m => m.ApplicationUser)
                 .Include(m => m.MovieGenres)
                 .ThenInclude(mg => mg.GenresForMovies)
-                               .Where(b => b.ApplicationUserId == user.Id);
+                               .Where(m => m.MyMovies == true && m.ApplicationUserId == user.Id);
                 return View(await movies.ToListAsync());
             }
             else
             {
                 var movies = _context.Movie
-               .Where(m => m.Title.Contains(searchMovies) || m.Year.Contains(searchMovies))
-               //.Include(m => m.ApplicationUser == user.Id)
+               .Where(m => m.MyMovies == true && m.ApplicationUserId == user.Id 
+               && m.Title.Contains(searchMovies) || m.Year.Contains(searchMovies))
                .Include(m => m.MovieGenres)
                .ThenInclude(mg => mg.GenresForMovies);
                 return View(await movies.ToListAsync());
             }
+        }
+
+
+        // GET: Wish List Movies
+        public async Task<IActionResult> WishList()
+        {
+            var user = await GetCurrentUserAsync();
+
+                var movies = _context.Movie
+                .Include(m => m.MovieGenres)
+                .ThenInclude(mg => mg.GenresForMovies)
+                .Where(m => m.ApplicationUserId == user.Id && m.WishList == true);
+                return View(await movies.ToListAsync());
+        }
+
+        // GET: Watch List Movies
+        public async Task<IActionResult> WatchList()
+        {
+            var user = await GetCurrentUserAsync();
+
+            var movies = _context.Movie
+            .Include(m => m.MovieGenres)
+            .ThenInclude(mg => mg.GenresForMovies)
+            .Where(m => m.ApplicationUserId == user.Id && m.WatchList == true);
+            return View(await movies.ToListAsync());
+        }
+
+        // GET: Seen List Movies
+        public async Task<IActionResult> SeenList()
+        {
+            var user = await GetCurrentUserAsync();
+
+            var movies = _context.Movie
+            .Include(m => m.MovieGenres)
+            .ThenInclude(mg => mg.GenresForMovies)
+            .Where(m => m.ApplicationUserId == user.Id && m.SeenList == true);
+            return View(await movies.ToListAsync());
         }
 
 
@@ -87,7 +124,7 @@ namespace Shelved.Controllers
         // POST: Movies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds")] MovieViewModel movieViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds,WatchList,WishList,SeenList,MyMovies")] MovieViewModel movieViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -100,7 +137,11 @@ namespace Shelved.Controllers
                     Year = movieViewModel.Year,
                     IsWatched = movieViewModel.IsWatched,
                     ImagePath = movieViewModel.ImagePath,
-                    ApplicationUserId = user.Id
+                    ApplicationUserId = user.Id,
+                    MyMovies = movieViewModel.MyMovies,
+                    WatchList = movieViewModel.WatchList,
+                    WishList = movieViewModel.WishList,
+                    SeenList = movieViewModel.SeenList
                 };
 
                 _context.Add(movieModel);

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shelved.Data;
 
 namespace Shelved.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200204192755_movieLists")]
+    partial class movieLists
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,9 +246,6 @@ namespace Shelved.Migrations
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("MyBooks")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("ReadItList")
                         .HasColumnType("bit");
 
@@ -275,7 +274,6 @@ namespace Shelved.Migrations
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
                             Author = "Janet Evanovich",
                             IsRead = true,
-                            MyBooks = false,
                             ReadItList = false,
                             ReadList = false,
                             Title = "One For The Money",
@@ -288,7 +286,6 @@ namespace Shelved.Migrations
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
                             Author = "Nick Hornby",
                             IsRead = true,
-                            MyBooks = false,
                             ReadItList = false,
                             ReadList = false,
                             Title = "Fever Pitch",
@@ -301,7 +298,6 @@ namespace Shelved.Migrations
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
                             Author = "P.G. Wodehouse",
                             IsRead = true,
-                            MyBooks = false,
                             ReadItList = false,
                             ReadList = false,
                             Title = "The Code of the Woosters",
@@ -357,9 +353,6 @@ namespace Shelved.Migrations
                     b.Property<bool>("ListenList")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("MyMusic")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -384,7 +377,6 @@ namespace Shelved.Migrations
                             HeardList = false,
                             IsHeard = true,
                             ListenList = false,
-                            MyMusic = false,
                             Title = "Sheryl Crow",
                             WishList = false,
                             Year = "1996"
@@ -397,7 +389,6 @@ namespace Shelved.Migrations
                             HeardList = false,
                             IsHeard = true,
                             ListenList = false,
-                            MyMusic = false,
                             Title = "Americana",
                             WishList = false,
                             Year = "1998"
@@ -410,7 +401,6 @@ namespace Shelved.Migrations
                             HeardList = false,
                             IsHeard = true,
                             ListenList = false,
-                            MyMusic = false,
                             Title = "In Your Honor",
                             WishList = false,
                             Year = "2005"
@@ -636,9 +626,6 @@ namespace Shelved.Migrations
                     b.Property<bool>("IsWatched")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("MyMovies")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("SeenList")
                         .HasColumnType("bit");
 
@@ -666,7 +653,6 @@ namespace Shelved.Migrations
                             Id = 1,
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
                             IsWatched = true,
-                            MyMovies = false,
                             SeenList = false,
                             Title = "Dr. Doolittle",
                             WatchList = false,
@@ -678,7 +664,6 @@ namespace Shelved.Migrations
                             Id = 2,
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
                             IsWatched = true,
-                            MyMovies = false,
                             SeenList = false,
                             Title = "Captain America",
                             WatchList = false,
@@ -690,7 +675,6 @@ namespace Shelved.Migrations
                             Id = 3,
                             ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
                             IsWatched = true,
-                            MyMovies = false,
                             SeenList = false,
                             Title = "Big Business",
                             WatchList = false,
@@ -740,13 +724,13 @@ namespace Shelved.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e6f37830-041f-43c7-b494-9e8ce57665ec",
+                            ConcurrencyStamp = "3067b075-35a2-498d-ad9f-a52315072619",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA6+F9fZLI1l2poLZ+o1EEJ3cNEmaQwQCRUn9tn4lGM2VYM8oMTjt1kkiXJv/F8bzg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEADKw0sppSKZ8VqXzlcxemt35iS2WcYB3XYYaXr4U44wCnq3T95N6Me1ZTF/ZhCNPA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,

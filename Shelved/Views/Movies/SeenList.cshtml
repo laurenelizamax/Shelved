@@ -1,20 +1,13 @@
 ﻿@model IEnumerable<Shelved.Models.Movie>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "SeenList";
 }
 
-<h1>My Movies</h1>
+<h1>SeenList</h1>
 
-<a asp-action="WishList">Wish List</a> |
-<a asp-action="WatchList">Watch List</a> |
-<a asp-action="SeenList">Seen That</a>
+<a asp-action="Index">Back to My Movies</a>
 
-<form asp-action="Index" asp-controller="Movies">
-    <label>Search Movies by Title or Year: </label>
-    <input name="searchMovies" type="text" />
-    <input class="btn btn-success" type="submit" value="Search" />
-</form>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -28,14 +21,12 @@
                 @Html.DisplayNameFor(model => model.Year)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsWatched)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ImagePath)
             </th>
             <th>
                 Genres
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -47,9 +38,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsWatched)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ImagePath)
@@ -64,7 +52,7 @@
                 </td>
                 <td>
                     @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
                     @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                 </td>
             </tr>

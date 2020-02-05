@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Shelved.Models;
+using Shelved.Models.ViewModels;
 
 namespace Shelved.Data
 {
@@ -326,7 +327,6 @@ namespace Shelved.Data
 
 
         }
-
 
     }
 }
