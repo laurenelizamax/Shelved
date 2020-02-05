@@ -22,6 +22,7 @@ namespace Shelved.Models.ViewModels
         [Display(Name = "Album Cover")]
         public string ImagePath { get; set; }
 
+        [Required(ErrorMessage = "Please Select Genre(s)")]
         [Display(Name = "Genres")]
         public List<int> GenreIds { get; set; }
         public GenresForCDs GenresForCDs { get; set; }

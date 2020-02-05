@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -124,7 +125,7 @@ namespace Shelved.Controllers
         // POST: CDs/Create      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds,MyMusic,ListenList,HeardList,WishList")] CDViewModel cdViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds,MyMusic,ListenList,HeardList,WishList,File")] CDViewModel cdViewModel, IFormFile image)
         {
             if (ModelState.IsValid)
             {
@@ -144,6 +145,7 @@ namespace Shelved.Controllers
                     WishList = cdViewModel.WishList,
                     HeardList = cdViewModel.HeardList
                 };
+
                 if (cdViewModel.File != null && cdViewModel.File.Length > 0)
                 {
                     var fileName = Guid.NewGuid().ToString() + Path.GetFileName(cdViewModel.File.FileName); //getting path of actual file name
