@@ -37,6 +37,7 @@
                 <label asp-for="GenreIds" class="control-label"></label>
                 <select multiple asp-for="GenreIds" class="form-control" asp-items="ViewBag.GenresForMovies"></select>
             </div>
+            <h5>Which list would you like to add your movie to?</h5>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="MyMovies" /> @Html.DisplayNameFor(model => model.MyMovies)

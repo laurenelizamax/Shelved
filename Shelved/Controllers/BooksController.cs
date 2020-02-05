@@ -36,14 +36,15 @@ namespace Shelved.Controllers
                 var books = _context.Book
              .Include(b => b.BookGenres)
              .ThenInclude(bg => bg.GenresForBooks)
-             .Where(b => b.ApplicationUserId == user.Id);
+             .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id);
                 return View(await books.ToListAsync());
             }
             else
             {
                 var books = _context.Book
-                .Where(b => b.Title.Contains(searchBooks) || b.Author.Contains(searchBooks))
-                //.Include(b => b.ApplicationUserId == user.Id)
+                .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id &&
+                b.Title.Contains(searchBooks) 
+                || b.Author.Contains(searchBooks))
                 .Include(b => b.BookGenres)
                 .ThenInclude(bg => bg.GenresForBooks);
                 
@@ -52,16 +53,55 @@ namespace Shelved.Controllers
         }
 
 
+        // GET: Wish List Books
+        public async Task<IActionResult> WishList()
+        {
+            var user = await GetCurrentUserAsync();
+
+            var books = _context.Book
+            .Include(b => b.BookGenres)
+            .ThenInclude(bg => bg.GenresForBooks)
+            .Where(b => b.ApplicationUserId == user.Id && b.WishList == true);
+            return View(await books.ToListAsync());
+        }
+
+        // GET: Read List Books
+        public async Task<IActionResult> ReadList()
+        {
+            var user = await GetCurrentUserAsync();
+
+            var books = _context.Book
+            .Include(b => b.BookGenres)
+            .ThenInclude(bg => bg.GenresForBooks)
+            .Where(b => b.ApplicationUserId == user.Id && b.ReadList == true);
+            return View(await books.ToListAsync());
+        }
+
+        // GET: Read It List Books
+        public async Task<IActionResult> ReaditList()
+        {
+            var user = await GetCurrentUserAsync();
+
+            var books = _context.Book
+            .Include(b => b.BookGenres)
+            .ThenInclude(bg => bg.GenresForBooks)
+            .Where(b => b.ApplicationUserId == user.Id && b.ReadItList == true);
+            return View(await books.ToListAsync());
+        }
+
+
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var user = await GetCurrentUserAsync();
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var book = await _context.Book
-                .Include(b => b.ApplicationUser)
+                .Where(b => b.ApplicationUserId == user.Id)
                 .Include(b => b.BookGenres)
                 .ThenInclude(bg => bg.GenresForBooks)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -86,7 +126,7 @@ namespace Shelved.Controllers
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds")] BookViewModel bookViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds,MyBooks,ReadList,WishList,ReadItList")] BookViewModel bookViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -100,7 +140,11 @@ namespace Shelved.Controllers
                     Year = bookViewModel.Year,
                     IsRead = bookViewModel.IsRead,
                     ImagePath = bookViewModel.ImagePath,
-                    ApplicationUserId = user.Id
+                    ApplicationUserId = user.Id,
+                    MyBooks = bookViewModel.MyBooks,
+                    ReadList = bookViewModel.ReadList,
+                    WishList = bookViewModel.WishList,
+                    ReadItList = bookViewModel.ReadItList
                 };
 
 
@@ -152,6 +196,10 @@ namespace Shelved.Controllers
                 IsRead = book.IsRead,
                 ImagePath = book.ImagePath,
                 ApplicationUserId = user.Id,
+                MyBooks = book.MyBooks,
+                ReadList = book.ReadList,
+                WishList = book.WishList,
+                ReadItList = book.ReadItList,
                 GenreIds = book.BookGenres.Select(bg => bg.GenreId).ToList()
             };
             
@@ -164,7 +212,7 @@ namespace Shelved.Controllers
         // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds")] BookViewModel bookViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds,MyBooks,ReadList,WishList,ReadItList")] BookViewModel bookViewModel)
         {
             var user = await GetCurrentUserAsync();
 
@@ -186,6 +234,11 @@ namespace Shelved.Controllers
                 bookModel.IsRead = bookViewModel.IsRead;
                 bookModel.ImagePath = bookViewModel.ImagePath;
                 bookModel.ApplicationUserId = user.Id;
+                bookModel.ReadItList = bookViewModel.ReadItList;
+                bookModel.WishList = bookViewModel.WishList;
+                bookModel.MyBooks = bookViewModel.MyBooks;
+                bookModel.ReadList = bookViewModel.ReadList;
+
 
                 bookModel.BookGenres = bookViewModel.GenreIds.Select(gid => new BookGenre
                 {
