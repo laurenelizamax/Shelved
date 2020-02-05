@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -143,6 +144,17 @@ namespace Shelved.Controllers
                     WishList = cdViewModel.WishList,
                     HeardList = cdViewModel.HeardList
                 };
+                if (cdViewModel.File != null && cdViewModel.File.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetFileName(cdViewModel.File.FileName); //getting path of actual file name
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName); //creating path combining file name w/ www.root\\images directory
+                    using (var fileSteam = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path
+                    {
+                        await cdViewModel.File.CopyToAsync(fileSteam);
+                    }
+                    cdModel.ImagePath = fileName;
+
+                }
 
                 _context.Add(cdModel);
                 await _context.SaveChangesAsync();

@@ -38,7 +38,7 @@
             @Html.DisplayNameFor(model => model.ImagePath)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
+            <img style="max-height: 120px; min-height: 100px;" class="img-responsive bookImage" src="@Url.Content("~/images/" + Model.ImagePath)" alt="" />
         </dd>
         <h6>
             Genres

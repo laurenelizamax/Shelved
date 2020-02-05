@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace Shelved.Models.ViewModels
 
         [Display(Name = "I've Heard This")]
         public bool IsHeard { get; set; }
+
+        [Display(Name = "Album Cover")]
         public string ImagePath { get; set; }
 
         [Display(Name = "Genres")]
@@ -34,6 +37,7 @@ namespace Shelved.Models.ViewModels
 
         [Display(Name = "Add To Heard That List")]
         public bool HeardList { get; set; }
+        public IFormFile File { get; set; }
 
     }
 }

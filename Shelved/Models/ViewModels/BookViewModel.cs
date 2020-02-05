@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +19,8 @@ namespace Shelved.Models.ViewModels
 
         [Display(Name = "I've Read This")]
         public bool IsRead { get; set; }
+
+        [Display(Name = "Book Cover")]
         public string ImagePath { get; set; }
 
         [Required(ErrorMessage = "Please Select Genre(s)")]
@@ -35,6 +39,8 @@ namespace Shelved.Models.ViewModels
 
         [Display(Name = "Add To Read That List")]
         public bool ReadItList { get; set; }
+
+        public IFormFile File { get; set; }
 
     }
 }
