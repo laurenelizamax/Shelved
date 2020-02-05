@@ -4,9 +4,11 @@
     ViewData["Title"] = "SeenList";
 }
 
-<h1>SeenList</h1>
+<h1>Movies Seen List</h1>
 
-<a asp-action="Index">Back to My Movies</a>
+<a asp-action="WatchList">Watch List</a> |
+<a asp-action="SeenList">I've Seen That</a> |
+<a asp-action="Index">Back to My Music</a>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -52,7 +54,7 @@
                 </td>
                 <td>
                     @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                 </td>
             </tr>

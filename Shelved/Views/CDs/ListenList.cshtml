@@ -1,14 +1,14 @@
-﻿@model IEnumerable<Shelved.Models.Book>
+﻿@model IEnumerable<Shelved.Models.CD>
 
 @{
-    ViewData["Title"] = "ReadList";
+    ViewData["Title"] = "ListenList";
 }
 
-<h1>ReadList</h1>
+<h1>Music Listen List</h1>
 
 <a asp-action="WishList">Wish List</a> |
-<a asp-action="ReadItList">I've Read That</a> |
-<a asp-action="Index">Back to My Books</a>
+<a asp-action="HeardList">I've Heard That</a> |
+<a asp-action="Index">Back to My Music</a>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -20,13 +20,13 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                @Html.DisplayNameFor(model => model.Artist)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Year)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsRead)
+                @Html.DisplayNameFor(model => model.IsHeard)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ImagePath)
@@ -45,28 +45,28 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Author)
+                    @Html.DisplayFor(modelItem => item.Artist)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Year)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsRead)
+                    @Html.DisplayFor(modelItem => item.IsHeard)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ImagePath)
                 </td>
                 <td>
-                    @foreach (var genre in item.BookGenres)
+                    @foreach (var genre in item.CDGenres)
                     {
                         <div>
-                            @Html.DisplayFor(modelItem => genre.GenresForBooks.Description)
+                            @Html.DisplayFor(modelItem => genre.GenresForCDs.Description)
                         </div>
                     }
                 </td>
                 <td>
                     @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
                     @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                 </td>
             </tr>

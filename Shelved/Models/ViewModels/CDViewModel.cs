@@ -23,5 +23,17 @@ namespace Shelved.Models.ViewModels
         public List<int> GenreIds { get; set; }
         public GenresForCDs GenresForCDs { get; set; }
 
+        [Display(Name = "Add To My Music")]
+        public bool MyMusic { get; set; }
+
+        [Display(Name = "Add To Listen List")]
+        public bool ListenList { get; set; }
+
+        [Display(Name = "Add To Wish List")]
+        public bool WishList { get; set; }
+
+        [Display(Name = "Add To Heard That List")]
+        public bool HeardList { get; set; }
+
     }
 }
