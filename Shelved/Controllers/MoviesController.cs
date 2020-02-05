@@ -193,6 +193,10 @@ namespace Shelved.Controllers
                 IsWatched = movie.IsWatched,
                 ImagePath = movie.ImagePath,
                 ApplicationUserId = user.Id,
+                MyMovies = movie.MyMovies,
+                WatchList = movie.WatchList,
+                WishList = movie.WishList,
+                SeenList = movie.SeenList,
                 GenreIds = movie.MovieGenres.Select(mg => mg.GenreId).ToList()
             };
 
@@ -205,7 +209,7 @@ namespace Shelved.Controllers
         // POST: Movies/Edit/5       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds")] MovieViewModel movieViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds,MyMovies,SeenList,WatchList,WishList")] MovieViewModel movieViewModel)
         {
             var user = await GetCurrentUserAsync();
 
@@ -226,6 +230,10 @@ namespace Shelved.Controllers
                 movieModel.IsWatched = movieViewModel.IsWatched;
                 movieModel.ImagePath = movieViewModel.ImagePath;
                 movieModel.ApplicationUserId = user.Id;
+                movieModel.MyMovies = movieViewModel.MyMovies;
+                movieModel.WatchList = movieViewModel.WatchList;
+                movieModel.WishList = movieViewModel.WishList;
+                movieModel.SeenList = movieViewModel.SeenList;
 
                 movieModel.MovieGenres = movieViewModel.GenreIds.Select(gid => new MovieGenre
                 {
