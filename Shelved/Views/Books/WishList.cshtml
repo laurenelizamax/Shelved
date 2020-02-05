@@ -54,7 +54,7 @@
                     @Html.DisplayFor(modelItem => item.IsRead)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ImagePath)
+                    <img class="img-responsive bookImage" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
                 </td>
                 <td>
                     @foreach (var genre in item.BookGenres)

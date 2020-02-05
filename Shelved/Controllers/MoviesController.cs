@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -126,7 +128,7 @@ namespace Shelved.Controllers
         // POST: Movies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds,WatchList,WishList,SeenList,MyMovies")] MovieViewModel movieViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds,WatchList,WishList,SeenList,MyMovies,File")] MovieViewModel movieViewModel, IFormFile image)
         {
             if (ModelState.IsValid)
             {
@@ -138,13 +140,25 @@ namespace Shelved.Controllers
                     Title = movieViewModel.Title,
                     Year = movieViewModel.Year,
                     IsWatched = movieViewModel.IsWatched,
-                    ImagePath = movieViewModel.ImagePath,
+                    //ImagePath = movieViewModel.ImagePath,
                     ApplicationUserId = user.Id,
                     MyMovies = movieViewModel.MyMovies,
                     WatchList = movieViewModel.WatchList,
                     WishList = movieViewModel.WishList,
                     SeenList = movieViewModel.SeenList
                 };
+
+                if (movieViewModel.File != null && movieViewModel.File.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetFileName(movieViewModel.File.FileName); //getting path of actual file name
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName); //creating path combining file name w/ www.root\\images directory
+                    using (var fileSteam = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path
+                    {
+                        await movieViewModel.File.CopyToAsync(fileSteam);
+                    }
+                    movieModel.ImagePath = fileName;
+
+                }
 
                 _context.Add(movieModel);
                 await _context.SaveChangesAsync();

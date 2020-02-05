@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +19,8 @@ namespace Shelved.Models
 
         [Display(Name = "I've Heard This")]
         public bool IsHeard { get; set; }
+
+        [Display(Name = "Album Cover")]
         public string ImagePath { get; set; }
 
         [Display(Name = "Genres")]
@@ -33,5 +37,8 @@ namespace Shelved.Models
 
         [Display(Name = "Add To Heard It List")]
         public bool HeardList { get; set; }
+
+        [NotMapped]
+        public IFormFile File { get; set; }
     }
 }

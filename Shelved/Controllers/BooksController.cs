@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -126,7 +128,7 @@ namespace Shelved.Controllers
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds,MyBooks,ReadList,WishList,ReadItList")] BookViewModel bookViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds,MyBooks,ReadList,WishList,ReadItList,File")] BookViewModel bookViewModel, IFormFile image)
         {
             if (ModelState.IsValid)
             {
@@ -139,7 +141,7 @@ namespace Shelved.Controllers
                     Author = bookViewModel.Author,
                     Year = bookViewModel.Year,
                     IsRead = bookViewModel.IsRead,
-                    ImagePath = bookViewModel.ImagePath,
+                    //ImagePath = bookViewModel.ImagePath,
                     ApplicationUserId = user.Id,
                     MyBooks = bookViewModel.MyBooks,
                     ReadList = bookViewModel.ReadList,
@@ -147,6 +149,17 @@ namespace Shelved.Controllers
                     ReadItList = bookViewModel.ReadItList
                 };
 
+                if (bookViewModel.File != null && bookViewModel.File.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetFileName(bookViewModel.File.FileName); //getting path of actual file name
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName); //creating path combining file name w/ www.root\\images directory
+                    using (var fileSteam = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path
+                    {
+                        await bookViewModel.File.CopyToAsync(fileSteam);
+                    }
+                    bookModel.ImagePath = fileName;
+
+                }
 
                 _context.Add(bookModel);
                 await _context.SaveChangesAsync();
