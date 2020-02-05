@@ -92,13 +92,15 @@ namespace Shelved.Controllers
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var user = await GetCurrentUserAsync();
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var movie = await _context.Movie
-                .Include(m => m.ApplicationUser)
+                .Where(m => m.ApplicationUserId == user.Id)
                 .Include(m => m.MovieGenres)
                 .ThenInclude(mg => mg.GenresForMovies)
                 .FirstOrDefaultAsync(m => m.Id == id);

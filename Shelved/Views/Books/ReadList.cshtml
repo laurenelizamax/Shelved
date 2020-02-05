@@ -1,20 +1,12 @@
 ﻿@model IEnumerable<Shelved.Models.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "ReadList";
 }
 
-<h1>My Books</h1>
+<h1>ReadList</h1>
 
-<a asp-action="WishList">Wish List</a> |
-<a asp-action="ReadList">Read List</a> |
-<a asp-action="ReadItList">I've Read That</a> |
-
-<form asp-action="Index" asp-controller="Books">
-    <label>Search Books by Title or Author: </label>
-    <input name="searchBooks" type="text" />
-    <input class="btn btn-success" type="submit" value="Search" />
-</form>
+<a asp-action="Index">Back to My Books</a>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -37,10 +29,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.ImagePath)
             </th>
-
             <th>
                 Genres
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
