@@ -76,30 +76,18 @@ namespace Shelved.Controllers
             return View(await movies.ToListAsync());
         }
 
+        // GET: Seen List Movies
+        public async Task<IActionResult> SeenList()
+        {
+            var user = await GetCurrentUserAsync();
 
-        //// GET: Movies
-        //public async Task<IActionResult> WishList(MoviesWishListViewModel moviesWishListView)
-        //{
-        //    var user = await GetCurrentUserAsync();
+            var movies = _context.Movie
+            .Include(m => m.MovieGenres)
+            .ThenInclude(mg => mg.GenresForMovies)
+            .Where(m => m.ApplicationUserId == user.Id && m.SeenList == true);
+            return View(await movies.ToListAsync());
+        }
 
-        //    var moviesWishListView = new MoviesWishListViewModel
-        //    {
-        //        Id = moviesWishListView.Id,
-        //        Title = moviesWishListView.Title,
-        //        Year = moviesWis.Year,
-        //        IsWatched = movie.IsWatched,
-        //        ImagePath = movie.ImagePath,
-        //        ApplicationUserId = user.Id,
-        //        GenreIds = movie.MovieGenres.Select(mg => mg.GenreId).ToList()
-        //    };
-
-        //         .Include(m => m.ApplicationUser)
-        //        .Include(m => m.MovieGenres)
-        //        .ThenInclude(mg => mg.GenresForMovies)
-        //                       .Where(b => b.ApplicationUserId == user.Id);
-        //    return View(await moviesWishListView.ToListAsync());
-
-        //}
 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -136,7 +124,7 @@ namespace Shelved.Controllers
         // POST: Movies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds")] MovieViewModel movieViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds,WatchList,WishList,SeenList,MyMovies")] MovieViewModel movieViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -149,7 +137,11 @@ namespace Shelved.Controllers
                     Year = movieViewModel.Year,
                     IsWatched = movieViewModel.IsWatched,
                     ImagePath = movieViewModel.ImagePath,
-                    ApplicationUserId = user.Id
+                    ApplicationUserId = user.Id,
+                    MyMovies = movieViewModel.MyMovies,
+                    WatchList = movieViewModel.WatchList,
+                    WishList = movieViewModel.WishList,
+                    SeenList = movieViewModel.SeenList
                 };
 
                 _context.Add(movieModel);
