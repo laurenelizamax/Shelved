@@ -123,7 +123,7 @@ namespace Shelved.Controllers
         // POST: CDs/Create      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds")] CDViewModel cdViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds,MyMusic,ListenList,HeardList,WishList")] CDViewModel cdViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -137,7 +137,11 @@ namespace Shelved.Controllers
                     Year = cdViewModel.Year,
                     IsHeard = cdViewModel.IsHeard,
                     ImagePath = cdViewModel.ImagePath,
-                    ApplicationUserId = user.Id
+                    ApplicationUserId = user.Id,
+                    MyMusic = cdViewModel.MyMusic,
+                    ListenList = cdViewModel.ListenList,
+                    WishList = cdViewModel.WishList,
+                    HeardList = cdViewModel.HeardList
                 };
 
                 _context.Add(cdModel);
@@ -189,6 +193,10 @@ namespace Shelved.Controllers
                 IsHeard = cD.IsHeard,
                 ImagePath = cD.ImagePath,
                 ApplicationUserId = user.Id,
+                MyMusic = cD.MyMusic,
+                ListenList = cD.ListenList,
+                WishList = cD.WishList,
+                HeardList = cD.HeardList,
                 GenreIds = cD.CDGenres.Select(bg => bg.GenreId).ToList()
             };
 
@@ -201,7 +209,7 @@ namespace Shelved.Controllers
         // POST: CDs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds")] CDViewModel cDViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds,MyMusic,ListenList,HeardList,WishList")] CDViewModel cDViewModel)
         {
             var user = await GetCurrentUserAsync();
 
@@ -224,6 +232,10 @@ namespace Shelved.Controllers
                 cDModel.IsHeard = cDViewModel.IsHeard;
                 cDModel.ImagePath = cDViewModel.ImagePath;
                 cDModel.ApplicationUserId = user.Id;
+                cDModel.MyMusic = cDViewModel.MyMusic;
+                cDModel.ListenList = cDViewModel.ListenList;
+                cDModel.WishList = cDViewModel.WishList;
+                cDModel.HeardList = cDViewModel.HeardList;
 
                 cDModel.CDGenres = cDViewModel.GenreIds.Select(gid => new CDGenre
                 {
