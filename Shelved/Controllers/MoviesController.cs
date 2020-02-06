@@ -36,17 +36,20 @@ namespace Shelved.Controllers
             if (searchMovies == null)
             {
                 var movies = _context.Movie
-                .Include(m => m.ApplicationUser)
                 .Include(m => m.MovieGenres)
                 .ThenInclude(mg => mg.GenresForMovies)
-                               .Where(m => m.MyMovies == true && m.ApplicationUserId == user.Id);
+                  .Where(m => m.MyMovies == true && m.ApplicationUserId == user.Id);
                 return View(await movies.ToListAsync());
             }
             else
             {
                 var movies = _context.Movie
-               .Where(m => m.MyMovies == true && m.ApplicationUserId == user.Id 
-               && m.Title.Contains(searchMovies) || m.Year.Contains(searchMovies))
+               .Where(m => m.MyMovies == true &&
+               m.ApplicationUserId == user.Id
+               && m.Title.Contains(searchMovies) ||
+               m.MyMovies == true &&
+               m.ApplicationUserId == user.Id
+               && m.Year.Contains(searchMovies))
                .Include(m => m.MovieGenres)
                .ThenInclude(mg => mg.GenresForMovies);
                 return View(await movies.ToListAsync());
@@ -55,39 +58,85 @@ namespace Shelved.Controllers
 
 
         // GET: Wish List Movies
-        public async Task<IActionResult> WishList()
+        public async Task<IActionResult> WishList(string searchWishList)
         {
             var user = await GetCurrentUserAsync();
 
+            if (searchWishList == null)
+            {
                 var movies = _context.Movie
                 .Include(m => m.MovieGenres)
                 .ThenInclude(mg => mg.GenresForMovies)
-                .Where(m => m.ApplicationUserId == user.Id && m.WishList == true);
+                    .Where(m => m.ApplicationUserId == user.Id && m.WishList == true);
                 return View(await movies.ToListAsync());
+            }
+            else
+            {
+                var movies = _context.Movie
+                    .Where(m => m.WishList == true &&
+                        m.ApplicationUserId == user.Id
+                        && m.Title.Contains(searchWishList) ||
+                    m.WishList == true &&
+                    m.ApplicationUserId == user.Id
+                        && m.Year.Contains(searchWishList))
+               .Include(m => m.MovieGenres)
+               .ThenInclude(mg => mg.GenresForMovies);
+                return View(await movies.ToListAsync());
+            }
         }
 
         // GET: Watch List Movies
-        public async Task<IActionResult> WatchList()
+        public async Task<IActionResult> WatchList(string searchWatchList)
         {
             var user = await GetCurrentUserAsync();
 
-            var movies = _context.Movie
-            .Include(m => m.MovieGenres)
-            .ThenInclude(mg => mg.GenresForMovies)
-            .Where(m => m.ApplicationUserId == user.Id && m.WatchList == true);
-            return View(await movies.ToListAsync());
+            if (searchWatchList == null)
+            {
+                var movies = _context.Movie
+                .Include(m => m.MovieGenres)
+                     .ThenInclude(mg => mg.GenresForMovies)
+                .Where(m => m.ApplicationUserId == user.Id && m.WatchList == true);
+                return View(await movies.ToListAsync());
+            }
+            else
+            {
+                var movies = _context.Movie
+                    .Where(m => m.WatchList == true &&
+                        m.ApplicationUserId == user.Id
+                        && m.Title.Contains(searchWatchList) ||
+                    m.WatchList == true &&
+                    m.ApplicationUserId == user.Id
+                        && m.Year.Contains(searchWatchList))
+               .Include(m => m.MovieGenres)
+               .ThenInclude(mg => mg.GenresForMovies);
+                return View(await movies.ToListAsync());
+            }
         }
 
         // GET: Seen List Movies
-        public async Task<IActionResult> SeenList()
+        public async Task<IActionResult> SeenList(string searchSeenList)
         {
             var user = await GetCurrentUserAsync();
 
-            var movies = _context.Movie
-            .Include(m => m.MovieGenres)
-            .ThenInclude(mg => mg.GenresForMovies)
-            .Where(m => m.ApplicationUserId == user.Id && m.SeenList == true);
-            return View(await movies.ToListAsync());
+            if (searchSeenList == null)
+            {
+                var movies = _context.Movie
+                .Include(m => m.MovieGenres)
+                    .ThenInclude(mg => mg.GenresForMovies)
+                .Where(m => m.ApplicationUserId == user.Id && m.SeenList == true);
+                return View(await movies.ToListAsync());
+            }
+            else
+            {
+                var movies = _context.Movie
+                    .Where(m => m.SeenList == true && m.ApplicationUserId == user.Id
+                        && m.Title.Contains(searchSeenList) ||
+                    m.SeenList == true && m.ApplicationUserId == user.Id
+                        && m.Year.Contains(searchSeenList))
+               .Include(m => m.MovieGenres)
+               .ThenInclude(mg => mg.GenresForMovies);
+                return View(await movies.ToListAsync());
+            }
         }
 
 

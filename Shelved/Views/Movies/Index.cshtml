@@ -6,6 +6,7 @@
 
 <h1>My Movies</h1>
 
+<a asp-action="Index">My Movies</a> |
 <a asp-action="WishList">Wish List</a> |
 <a asp-action="WatchList">Watch List</a> |
 <a asp-action="SeenList">Seen That</a>
@@ -15,6 +16,7 @@
     <input name="searchMovies" type="text" />
     <input class="btn btn-success" type="submit" value="Search" />
 </form>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -41,33 +43,31 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsWatched)
-            </td>
-            <td>
-                <img style="max-height: 70px; min-height: 60px;" class="img-responsive" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
-            </td>
-            <td>
-                @foreach (var genre in item.MovieGenres)
-                {
-                    <div>
-                        @Html.DisplayFor(modelItem => genre.GenresForMovies.Description)
-                    </div>
-                }
-            </td>
-            <td>
-                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsWatched)
+                </td>
+                <td>
+                    <img style="max-height: 70px; min-height: 60px;" class="img-responsive" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
+                </td>
+                <td>
+                    @foreach (var genre in item.MovieGenres)
+                    {
+                        <div>
+                            @Html.DisplayFor(modelItem => genre.GenresForMovies.Description)
+                        </div>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
