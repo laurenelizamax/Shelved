@@ -256,7 +256,7 @@ namespace Shelved.Controllers
                 Title = movie.Title,
                 Year = movie.Year,
                 IsWatched = movie.IsWatched,
-                ImagePath = movie.ImagePath,
+                File = movie.File,
                 ApplicationUserId = user.Id,
                 MyMovies = movie.MyMovies,
                 WatchList = movie.WatchList,
@@ -293,7 +293,7 @@ namespace Shelved.Controllers
                 movieModel.Title = movieViewModel.Title;
                 movieModel.Year = movieViewModel.Year;
                 movieModel.IsWatched = movieViewModel.IsWatched;
-                movieModel.ImagePath = movieViewModel.ImagePath;
+                movieModel.File = movieViewModel.File;
                 movieModel.ApplicationUserId = user.Id;
                 movieModel.MyMovies = movieViewModel.MyMovies;
                 movieModel.WatchList = movieViewModel.WatchList;

@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Shelved.Models.Book>
+﻿@model ReflectionIT.Mvc.Paging.PagingList<Shelved.Models.Book>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
 
 @{
     ViewData["Title"] = "Index";
@@ -9,13 +12,20 @@
 <a asp-action="Index">My Books</a> |
 <a asp-action="WishList">Wish List</a> |
 <a asp-action="ReadList">Read List</a> |
-<a asp-action="ReadItList">I've Read That</a> 
+<a asp-action="ReadItList">I've Read That</a>
 
-<form asp-action="Index" asp-controller="Books">
+<form method="get" class="form-inline">
     <label>Search Books by Title or Author: </label>
-    <input name="searchBooks" type="text" />
-    <input class="btn btn-success" type="submit" value="Search" />
+    <input name="searchBooks" class="form-control" placeholder="searchBooks"
+           value="@Model.RouteValue["SearchBooks"]" />
+    <button type="submit" class="btn btn-info">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+    </button>
 </form>
+
+<nav aria-label="Books">
+    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+</nav>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -78,3 +88,6 @@
         }
     </tbody>
 </table>
+<nav aria-label="Books">
+    <vc:pager paging-list="@Model" />
+</nav>
