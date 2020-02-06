@@ -6,9 +6,10 @@
 
 <h1>My Books</h1>
 
+<a asp-action="Index">My Books</a> |
 <a asp-action="WishList">Wish List</a> |
 <a asp-action="ReadList">Read List</a> |
-<a asp-action="ReadItList">I've Read That</a> |
+<a asp-action="ReadItList">I've Read That</a> 
 
 <form asp-action="Index" asp-controller="Books">
     <label>Search Books by Title or Author: </label>
@@ -60,7 +61,7 @@
                     @Html.DisplayFor(modelItem => item.IsRead)
                 </td>
                 <td>
-                    <img style="max-height: 70px; min-height: 60px; class="img-responsive bookImage" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
+                    <img style="max-height: 60px; min-height: 60px;" class="img-responsive bookImage" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
                 </td>
                 <td>
                     @foreach (var genre in item.BookGenres)

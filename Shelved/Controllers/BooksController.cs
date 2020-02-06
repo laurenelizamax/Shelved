@@ -45,50 +45,101 @@ namespace Shelved.Controllers
             {
                 var books = _context.Book
                 .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id &&
-                b.Title.Contains(searchBooks) 
-                || b.Author.Contains(searchBooks))
+                b.Title.Contains(searchBooks)
+                || b.MyBooks == true && b.ApplicationUserId == user.Id 
+                && b.Author.Contains(searchBooks))
                 .Include(b => b.BookGenres)
                 .ThenInclude(bg => bg.GenresForBooks);
-                
+
                 return View(await books.ToListAsync());
             }
         }
 
 
         // GET: Wish List Books
-        public async Task<IActionResult> WishList()
+        public async Task<IActionResult> WishList(string searchWishList)
         {
             var user = await GetCurrentUserAsync();
 
-            var books = _context.Book
-            .Include(b => b.BookGenres)
-            .ThenInclude(bg => bg.GenresForBooks)
-            .Where(b => b.ApplicationUserId == user.Id && b.WishList == true);
-            return View(await books.ToListAsync());
+            if (searchWishList == null)
+            {
+                var books = _context.Book
+                   .Include(b => b.BookGenres)
+                   .ThenInclude(bg => bg.GenresForBooks)
+                    .Where(b => b.ApplicationUserId == user.Id && b.WishList == true);
+                return View(await books.ToListAsync());
+
+            }
+            else
+            {
+                var books = _context.Book
+               .Where(b => b.WishList == true && b.ApplicationUserId == user.Id &&
+               b.Title.Contains(searchWishList)
+               || b.WishList == true && b.ApplicationUserId == user.Id
+               && b.Author.Contains(searchWishList))
+               .Include(b => b.BookGenres)
+               .ThenInclude(bg => bg.GenresForBooks);
+
+                return View(await books.ToListAsync());
+            }
+
         }
 
         // GET: Read List Books
-        public async Task<IActionResult> ReadList()
+        public async Task<IActionResult> ReadList(string searchReadList)
         {
             var user = await GetCurrentUserAsync();
 
-            var books = _context.Book
-            .Include(b => b.BookGenres)
-            .ThenInclude(bg => bg.GenresForBooks)
-            .Where(b => b.ApplicationUserId == user.Id && b.ReadList == true);
-            return View(await books.ToListAsync());
+            if (searchReadList == null)
+            {
+                var books = _context.Book
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.GenresForBooks)
+                  .Where(b => b.ApplicationUserId == user.Id && b.ReadList == true);
+                return View(await books.ToListAsync());
+
+            }
+            else
+            {
+                var books = _context.Book
+               .Where(b => b.ReadList == true && b.ApplicationUserId == user.Id &&
+               b.Title.Contains(searchReadList)
+               || b.ReadList == true && b.ApplicationUserId == user.Id
+               && b.Author.Contains(searchReadList))
+               .Include(b => b.BookGenres)
+               .ThenInclude(bg => bg.GenresForBooks);
+
+                return View(await books.ToListAsync());
+            }
         }
 
         // GET: Read It List Books
-        public async Task<IActionResult> ReaditList()
+        public async Task<IActionResult> ReaditList(string searchReadIt)
         {
             var user = await GetCurrentUserAsync();
 
-            var books = _context.Book
-            .Include(b => b.BookGenres)
-            .ThenInclude(bg => bg.GenresForBooks)
-            .Where(b => b.ApplicationUserId == user.Id && b.ReadItList == true);
-            return View(await books.ToListAsync());
+            if (searchReadIt == null)
+            {
+                var books = _context.Book
+           .Include(b => b.BookGenres)
+           .ThenInclude(bg => bg.GenresForBooks)
+           .Where(b => b.ApplicationUserId == user.Id && b.ReadItList == true);
+                return View(await books.ToListAsync());
+
+            }
+            else
+            {
+                var books = _context.Book
+               .Where(b => b.ReadItList == true && b.ApplicationUserId == user.Id &&
+               b.Title.Contains(searchReadIt)
+               || b.ReadItList == true && b.ApplicationUserId == user.Id
+               && b.Author.Contains(searchReadIt))
+               .Include(b => b.BookGenres)
+               .ThenInclude(bg => bg.GenresForBooks);
+
+                return View(await books.ToListAsync());
+            }
+
         }
 
 
@@ -215,7 +266,7 @@ namespace Shelved.Controllers
                 ReadItList = book.ReadItList,
                 GenreIds = book.BookGenres.Select(bg => bg.GenreId).ToList()
             };
-            
+
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", book.ApplicationUserId);
             ViewData["GenresForBooks"] = new SelectList(_context.GenresForBook, "Id", "Description", bookViewModel.GenreIds);
 
