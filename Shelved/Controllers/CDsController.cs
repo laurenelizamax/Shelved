@@ -43,8 +43,12 @@ namespace Shelved.Controllers
             else
             {
                 var cds = _context.CD
-                .Where(c => c.MyMusic == true && c.ApplicationUserId == user.Id &&
-                c.Title.Contains(searchMusic) || c.Artist.Contains(searchMusic))
+                .Where(c => c.MyMusic == true && 
+                c.ApplicationUserId == user.Id &&
+                c.Title.Contains(searchMusic) ||
+                c.MyMusic == true &&
+                c.ApplicationUserId == user.Id &&
+                c.Artist.Contains(searchMusic))
                 .Include(c => c.CDGenres)
                 .ThenInclude(cg => cg.GenresForCDs);
                 return View(await cds.ToListAsync());
@@ -52,41 +56,86 @@ namespace Shelved.Controllers
         }
 
         // GET: Listen List Music
-        public async Task<IActionResult> ListenList()
+        public async Task<IActionResult> ListenList(string searchListenList)
         {
             var user = await GetCurrentUserAsync();
 
-            var cds = _context.CD
+            if (searchListenList == null)
+            {
+                var cds = _context.CD
             .Include(c => c.CDGenres)
             .ThenInclude(cg => cg.GenresForCDs)
             .Where(c => c.ApplicationUserId == user.Id & c.ListenList == true);
-            return View(await cds.ToListAsync());
+                return View(await cds.ToListAsync());
+            }
+            else
+            {
+                var cds = _context.CD
+                .Where(c => c.ListenList == true && c.ApplicationUserId == user.Id 
+                && c.Title.Contains(searchListenList) 
+                || c.ListenList == true && c.ApplicationUserId == user.Id
+                && c.Artist.Contains(searchListenList))
+                .Include(c => c.CDGenres)
+                .ThenInclude(cg => cg.GenresForCDs);
+                return View(await cds.ToListAsync());
+            }
+            
         }
 
 
         // GET: Wish List Music
-        public async Task<IActionResult> WishList()
+        public async Task<IActionResult> WishList(string searchWishList)
         {
             var user = await GetCurrentUserAsync();
 
-            var cds = _context.CD
+            if (searchWishList == null)
+            {
+                var cds = _context.CD
             .Include(c => c.CDGenres)
             .ThenInclude(cg => cg.GenresForCDs)
             .Where(c => c.ApplicationUserId == user.Id && c.WishList == true);
-            return View(await cds.ToListAsync());
+                return View(await cds.ToListAsync());
+            }
+            else
+            {
+                var cds = _context.CD
+                .Where(c => c.WishList == true && c.ApplicationUserId == user.Id
+                && c.Title.Contains(searchWishList)
+                || c.WishList == true && c.ApplicationUserId == user.Id
+                && c.Artist.Contains(searchWishList))
+                .Include(c => c.CDGenres)
+                .ThenInclude(cg => cg.GenresForCDs);
+                return View(await cds.ToListAsync());
+            }
         }
 
+
         // GET: Heard List Movies
-        public async Task<IActionResult> HeardList()
+        public async Task<IActionResult> HeardList(string searchHeardList)
         {
             var user = await GetCurrentUserAsync();
 
-            var cds = _context.CD
-            .Include(c => c.CDGenres)
-            .ThenInclude(cg => cg.GenresForCDs)
-            .Where(c => c.ApplicationUserId == user.Id && c.HeardList == true);
-            return View(await cds.ToListAsync());
+            if (searchHeardList == null)
+            {
+                var cds = _context.CD
+                .Include(c => c.CDGenres)
+                .ThenInclude(cg => cg.GenresForCDs)
+                .Where(c => c.ApplicationUserId == user.Id && c.HeardList == true);
+                return View(await cds.ToListAsync());
+            }
+            else
+            {
+                var cds = _context.CD
+                .Where(c => c.HeardList == true && c.ApplicationUserId == user.Id
+                && c.Title.Contains(searchHeardList)
+                || c.HeardList == true && c.ApplicationUserId == user.Id
+                && c.Artist.Contains(searchHeardList))
+                .Include(c => c.CDGenres)
+                .ThenInclude(cg => cg.GenresForCDs);
+                return View(await cds.ToListAsync());
+            }
         }
+
 
         // GET: CDs/Details/5
         public async Task<IActionResult> Details(int? id)
