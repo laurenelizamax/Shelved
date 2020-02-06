@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using ReflectionIT.Mvc.Paging;
 using Shelved.Data;
@@ -29,83 +30,49 @@ namespace Shelved.Controllers
             _userManager = userManager;
         }
 
-        //public async Task<IActionResult> Index(int page = 1)
-        //{
-        //    var user = await GetCurrentUserAsync();
-
-        //    var qry = _context.Book.AsNoTracking()
-        //           .Include(b => b.BookGenres)
-        //             .ThenInclude(bg => bg.GenresForBooks)
-        //         .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id)
-        //                 .OrderBy(b => b.Title);
-
-        //    var model = await PagingList.CreateAsync(qry, 10, page);
-        //    return View(model);
-        //}
-
+ 
         public async Task<IActionResult> Index(string searchBooks, int page = 1, string sortBy = "Title")
         {
             var user = await GetCurrentUserAsync();
 
-            if (!string.IsNullOrWhiteSpace(searchBooks))
+            if (string.IsNullOrWhiteSpace(searchBooks))
             {
 
                 var books = _context.Book
                     .AsNoTracking()
-             .Include(b => b.BookGenres)
-             .ThenInclude(bg => bg.GenresForBooks)
-             .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id);
+                    .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id)
+                    .Include(b => b.BookGenres)
+                        .ThenInclude(bg => bg.GenresForBooks);
 
                 var model = await PagingList.CreateAsync(
                              books, 10, page, sortBy, "Title");
-                return View(await books
-                   .ToListAsync());
+
+                model.RouteValue = new RouteValueDictionary {
+                    { "searchBooks", searchBooks}
+                     };
+
+                return View(model);
             }
             else
             {
                 var books = _context.Book
                       .AsNoTracking()
-                .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id &&
-                b.Title.Contains(searchBooks)
-                || b.MyBooks == true && b.ApplicationUserId == user.Id
-                && b.Author.Contains(searchBooks))
-                .Include(b => b.BookGenres)
-                .ThenInclude(bg => bg.GenresForBooks);
+                .Where(b => b.MyBooks == true
+                    && b.ApplicationUserId == user.Id
+                    && (b.Title.Contains(searchBooks) || b.Author.Contains(searchBooks)))
+                        .Include(b => b.BookGenres)
+                             .ThenInclude(bg => bg.GenresForBooks);
 
                 var model = await PagingList.CreateAsync(
-                                    books, 10, page, searchBooks, "Title");
-                return View(await books.ToListAsync());
+                                    books, 10, page, sortBy, "Title");
+
+                model.RouteValue = new RouteValueDictionary {
+                    { "SearchBooks", searchBooks}
+                        };
+
+                return View(model);
             }
         }
-
-
-        //// GET: Books
-        //public async Task<IActionResult> Index(string searchBooks)
-        //{
-        //    var user = await GetCurrentUserAsync();
-
-        //    if (searchBooks == null)
-        //    {
-        //        var books = _context.Book
-        //        .Include(b => b.BookGenres)
-        //            .ThenInclude(bg => bg.GenresForBooks)
-        //        .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id);
-        //        return View(await books
-        //           .ToListAsync());
-        //    }
-        //    else
-        //    {
-        //        var books = _context.Book
-        //        .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id &&
-        //            b.Title.Contains(searchBooks)
-        //        || b.MyBooks == true && b.ApplicationUserId == user.Id
-        //            && b.Author.Contains(searchBooks))
-        //            .Include(b => b.BookGenres)
-        //        .ThenInclude(bg => bg.GenresForBooks);
-
-        //        return View(await books.ToListAsync());
-        //    }
-        //}
 
 
         // GET: Wish List Books
