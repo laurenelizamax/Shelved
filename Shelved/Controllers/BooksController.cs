@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ReflectionIT.Mvc.Paging;
 using Shelved.Data;
 using Shelved.Models;
 using Shelved.Models.ViewModels;
@@ -28,32 +29,83 @@ namespace Shelved.Controllers
             _userManager = userManager;
         }
 
-        // GET: Books
-        public async Task<IActionResult> Index(string searchBooks)
+        //public async Task<IActionResult> Index(int page = 1)
+        //{
+        //    var user = await GetCurrentUserAsync();
+
+        //    var qry = _context.Book.AsNoTracking()
+        //           .Include(b => b.BookGenres)
+        //             .ThenInclude(bg => bg.GenresForBooks)
+        //         .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id)
+        //                 .OrderBy(b => b.Title);
+
+        //    var model = await PagingList.CreateAsync(qry, 10, page);
+        //    return View(model);
+        //}
+
+        public async Task<IActionResult> Index(string searchBooks, int page = 1, string sortBy = "Title")
         {
             var user = await GetCurrentUserAsync();
 
-            if (searchBooks == null)
+            if (!string.IsNullOrWhiteSpace(searchBooks))
             {
+
                 var books = _context.Book
+                    .AsNoTracking()
              .Include(b => b.BookGenres)
              .ThenInclude(bg => bg.GenresForBooks)
              .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id);
-                return View(await books.ToListAsync());
+
+                var model = await PagingList.CreateAsync(
+                             books, 10, page, sortBy, "Title");
+                return View(await books
+                   .ToListAsync());
             }
             else
             {
                 var books = _context.Book
+                      .AsNoTracking()
                 .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id &&
                 b.Title.Contains(searchBooks)
-                || b.MyBooks == true && b.ApplicationUserId == user.Id 
+                || b.MyBooks == true && b.ApplicationUserId == user.Id
                 && b.Author.Contains(searchBooks))
                 .Include(b => b.BookGenres)
                 .ThenInclude(bg => bg.GenresForBooks);
 
+                var model = await PagingList.CreateAsync(
+                                    books, 10, page, searchBooks, "Title");
                 return View(await books.ToListAsync());
             }
         }
+
+
+        //// GET: Books
+        //public async Task<IActionResult> Index(string searchBooks)
+        //{
+        //    var user = await GetCurrentUserAsync();
+
+        //    if (searchBooks == null)
+        //    {
+        //        var books = _context.Book
+        //        .Include(b => b.BookGenres)
+        //            .ThenInclude(bg => bg.GenresForBooks)
+        //        .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id);
+        //        return View(await books
+        //           .ToListAsync());
+        //    }
+        //    else
+        //    {
+        //        var books = _context.Book
+        //        .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id &&
+        //            b.Title.Contains(searchBooks)
+        //        || b.MyBooks == true && b.ApplicationUserId == user.Id
+        //            && b.Author.Contains(searchBooks))
+        //            .Include(b => b.BookGenres)
+        //        .ThenInclude(bg => bg.GenresForBooks);
+
+        //        return View(await books.ToListAsync());
+        //    }
+        //}
 
 
         // GET: Wish List Books
@@ -258,7 +310,7 @@ namespace Shelved.Controllers
                 Author = book.Author,
                 Year = book.Year,
                 IsRead = book.IsRead,
-                ImagePath = book.ImagePath,
+                File = book.File,
                 ApplicationUserId = user.Id,
                 MyBooks = book.MyBooks,
                 ReadList = book.ReadList,
@@ -296,7 +348,7 @@ namespace Shelved.Controllers
                 bookModel.Author = bookViewModel.Author;
                 bookModel.Year = bookViewModel.Year;
                 bookModel.IsRead = bookViewModel.IsRead;
-                bookModel.ImagePath = bookViewModel.ImagePath;
+                bookModel.File = bookViewModel.File;
                 bookModel.ApplicationUserId = user.Id;
                 bookModel.ReadItList = bookViewModel.ReadItList;
                 bookModel.WishList = bookViewModel.WishList;

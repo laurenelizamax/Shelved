@@ -254,7 +254,7 @@ namespace Shelved.Controllers
                 Artist = cD.Artist,
                 Year = cD.Year,
                 IsHeard = cD.IsHeard,
-                ImagePath = cD.ImagePath,
+                File = cD.File,
                 ApplicationUserId = user.Id,
                 MyMusic = cD.MyMusic,
                 ListenList = cD.ListenList,
@@ -293,7 +293,7 @@ namespace Shelved.Controllers
                 cDModel.Artist = cDViewModel.Artist;
                 cDModel.Year = cDViewModel.Year;
                 cDModel.IsHeard = cDViewModel.IsHeard;
-                cDModel.ImagePath = cDViewModel.ImagePath;
+                cDModel.File = cDViewModel.File;
                 cDModel.ApplicationUserId = user.Id;
                 cDModel.MyMusic = cDViewModel.MyMusic;
                 cDModel.ListenList = cDViewModel.ListenList;

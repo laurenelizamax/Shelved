@@ -42,5 +42,8 @@ namespace Shelved.Models.ViewModels
 
         public IFormFile File { get; set; }
 
+        public int CurrentPage { get; set; }
+        public int RecordsPerPage { get; set; } = 5;
+
     }
 }

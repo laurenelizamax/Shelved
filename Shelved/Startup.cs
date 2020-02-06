@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shelved.Models;
+using ReflectionIT.Mvc.Paging;
 
 namespace Shelved
 {
@@ -36,6 +37,8 @@ namespace Shelved
             services.AddControllersWithViews();
             services.AddRazorPages()
                     .AddRazorRuntimeCompilation();
+            services.AddPaging();
+
 
         }
 
