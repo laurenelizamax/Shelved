@@ -4,12 +4,29 @@
     ViewData["Title"] = "WishList";
 }
 
-<h1>Music Wish List</h1>
+    <body>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <img src="~/images//music2.jpg" alt="cds" style="max-height: 90px; min-height: 80px;">  &nbsp;
 
-<a asp-action="WishList">Wish List</a> |
-<a asp-action="ListenList">Listen List</a> |
-<a asp-action="HeardList">I've Heard That</a> |
-<a asp-action="Index">Back to My Music</a>
+                <a class="navbar-brand" asp-area="" asp-controller="CDs" asp-action="WishList">Wish List</a>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="CDs" asp-action="ListenList">Listen List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="CDs" asp-action="HeardList">I've Heard That</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="CDs" asp-action="Index">My Music</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </body>
 
 <form asp-action="WishList" asp-controller="CDs">
     <label>Search Wish List by Artist or Album: </label>
