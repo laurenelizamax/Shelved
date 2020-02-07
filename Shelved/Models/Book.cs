@@ -30,7 +30,7 @@ namespace Shelved.Models
         [Display(Name = "Add To My Books")]
         public bool MyBooks { get; set; }
 
-        [Display(Name = "Add To Read List")]
+        [Display(Name = "Add To Books to Read")]
         public bool ReadList { get; set; }
 
         [Display(Name = "Add To Wish List")]

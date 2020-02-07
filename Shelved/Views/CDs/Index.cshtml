@@ -12,7 +12,7 @@
 <a asp-action="Index">My Music</a> |
 <a asp-action="WishList">Wish List</a> |
 <a asp-action="ListenList">Listen List</a> |
-<a asp-action="HeardList">Heard That</a>
+<a asp-action="HeardList">I've Heard That</a>
 
 <form method="get" class="form-inline">
     <label>Search Music by Title or Artist: </label>
@@ -81,7 +81,7 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">CD Details</a>
                 </td>
             </tr>
         }
