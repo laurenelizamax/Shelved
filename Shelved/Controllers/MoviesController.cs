@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using ReflectionIT.Mvc.Paging;
 using Shelved.Data;
 using Shelved.Models;
 using Shelved.Models.ViewModels;
@@ -28,7 +30,7 @@ namespace Shelved.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string searchMovies)
+        public async Task<IActionResult> Index(string searchMovies, int page = 1, string sortBy = "Title")
         {
             var user = await GetCurrentUserAsync();
 
@@ -36,23 +38,38 @@ namespace Shelved.Controllers
             if (searchMovies == null)
             {
                 var movies = _context.Movie
+                      .AsNoTracking()
                 .Include(m => m.MovieGenres)
                 .ThenInclude(mg => mg.GenresForMovies)
                   .Where(m => m.MyMovies == true && m.ApplicationUserId == user.Id);
-                return View(await movies.ToListAsync());
+
+
+                var model = await PagingList.CreateAsync(
+                                movies, 5, page, sortBy, "Title");
+
+                model.RouteValue = new RouteValueDictionary {
+                    { "searchMovies", searchMovies}
+                     };
+
+                return View(model);
             }
             else
             {
                 var movies = _context.Movie
-               .Where(m => m.MyMovies == true &&
-               m.ApplicationUserId == user.Id
-               && m.Title.Contains(searchMovies) ||
-               m.MyMovies == true &&
-               m.ApplicationUserId == user.Id
-               && m.Year.Contains(searchMovies))
-               .Include(m => m.MovieGenres)
-               .ThenInclude(mg => mg.GenresForMovies);
-                return View(await movies.ToListAsync());
+                          .AsNoTracking()
+               .Where(m => m.MyMovies == true && m.ApplicationUserId == user.Id &&
+                     (m.Title.Contains(searchMovies) || m.Year.Contains(searchMovies)))
+                    .Include(m => m.MovieGenres)
+                        .ThenInclude(mg => mg.GenresForMovies);
+
+                var model = await PagingList.CreateAsync(
+                                              movies, 5, page, sortBy, "Title");
+
+                model.RouteValue = new RouteValueDictionary {
+                    { "searchMovies", searchMovies}
+                     };
+
+                return View(model);
             }
         }
 
@@ -73,14 +90,10 @@ namespace Shelved.Controllers
             else
             {
                 var movies = _context.Movie
-                    .Where(m => m.WishList == true &&
-                        m.ApplicationUserId == user.Id
-                        && m.Title.Contains(searchWishList) ||
-                    m.WishList == true &&
-                    m.ApplicationUserId == user.Id
-                        && m.Year.Contains(searchWishList))
-               .Include(m => m.MovieGenres)
-               .ThenInclude(mg => mg.GenresForMovies);
+                    .Where(m => m.WishList == true && m.ApplicationUserId == user.Id &&
+                          (m.Title.Contains(searchWishList) || m.Year.Contains(searchWishList)))
+                        .Include(m => m.MovieGenres)
+                            .ThenInclude(mg => mg.GenresForMovies);
                 return View(await movies.ToListAsync());
             }
         }
@@ -101,14 +114,10 @@ namespace Shelved.Controllers
             else
             {
                 var movies = _context.Movie
-                    .Where(m => m.WatchList == true &&
-                        m.ApplicationUserId == user.Id
-                        && m.Title.Contains(searchWatchList) ||
-                    m.WatchList == true &&
-                    m.ApplicationUserId == user.Id
-                        && m.Year.Contains(searchWatchList))
-               .Include(m => m.MovieGenres)
-               .ThenInclude(mg => mg.GenresForMovies);
+                    .Where(m => m.WatchList == true && m.ApplicationUserId == user.Id &&
+                          (m.Title.Contains(searchWatchList) || m.Year.Contains(searchWatchList)))
+                        .Include(m => m.MovieGenres)
+                             .ThenInclude(mg => mg.GenresForMovies);
                 return View(await movies.ToListAsync());
             }
         }
@@ -129,12 +138,10 @@ namespace Shelved.Controllers
             else
             {
                 var movies = _context.Movie
-                    .Where(m => m.SeenList == true && m.ApplicationUserId == user.Id
-                        && m.Title.Contains(searchSeenList) ||
-                    m.SeenList == true && m.ApplicationUserId == user.Id
-                        && m.Year.Contains(searchSeenList))
-               .Include(m => m.MovieGenres)
-               .ThenInclude(mg => mg.GenresForMovies);
+                    .Where(m => m.SeenList == true && m.ApplicationUserId == user.Id &&
+                         (m.Title.Contains(searchSeenList) || m.Year.Contains(searchSeenList)))
+                        .Include(m => m.MovieGenres)
+                            .ThenInclude(mg => mg.GenresForMovies);
                 return View(await movies.ToListAsync());
             }
         }

@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using ReflectionIT.Mvc.Paging;
 using Shelved.Data;
 using Shelved.Models;
 using Shelved.Models.ViewModels;
@@ -28,30 +30,46 @@ namespace Shelved.Controllers
         }
 
         // GET: CDs
-        public async Task<IActionResult> Index(string searchMusic)
+        public async Task<IActionResult> Index(string searchMusic, int page = 1, string sortBy = "Title")
         {
             var user = await GetCurrentUserAsync();
 
-            if (searchMusic == null)
+
+            if (string.IsNullOrWhiteSpace(searchMusic))
             {
                 var cds = _context.CD
-              .Include(c => c.CDGenres)
-              .ThenInclude(cg => cg.GenresForCDs)
-                   .Where(c => c.MyMusic == true && c.ApplicationUserId == user.Id);
-                return View(await cds.ToListAsync());
+                         .AsNoTracking()
+                .Include(c => c.CDGenres)
+                   .ThenInclude(cg => cg.GenresForCDs)
+                .Where(c => c.MyMusic == true && c.ApplicationUserId == user.Id);
+
+
+                var model = await PagingList.CreateAsync(
+                             cds, 5, page, sortBy, "Title");
+
+                model.RouteValue = new RouteValueDictionary {
+                    { "searchBooks", searchMusic}
+                     };
+
+                return View(model);
             }
             else
             {
                 var cds = _context.CD
-                .Where(c => c.MyMusic == true && 
-                c.ApplicationUserId == user.Id &&
-                c.Title.Contains(searchMusic) ||
-                c.MyMusic == true &&
-                c.ApplicationUserId == user.Id &&
-                c.Artist.Contains(searchMusic))
-                .Include(c => c.CDGenres)
-                .ThenInclude(cg => cg.GenresForCDs);
-                return View(await cds.ToListAsync());
+                      .AsNoTracking()
+                .Where(c => c.MyMusic == true && c.ApplicationUserId == user.Id &&
+                (c.Title.Contains(searchMusic) || c.Artist.Contains(searchMusic)))
+                    .Include(c => c.CDGenres)
+                        .ThenInclude(cg => cg.GenresForCDs);
+
+                var model = await PagingList.CreateAsync(
+                                           cds, 10, page, sortBy, "Title");
+
+                model.RouteValue = new RouteValueDictionary {
+                    { "searchBooks", searchMusic}
+                     };
+
+                return View(model);
             }
         }
 
@@ -71,15 +89,13 @@ namespace Shelved.Controllers
             else
             {
                 var cds = _context.CD
-                .Where(c => c.ListenList == true && c.ApplicationUserId == user.Id 
-                && c.Title.Contains(searchListenList) 
-                || c.ListenList == true && c.ApplicationUserId == user.Id
-                && c.Artist.Contains(searchListenList))
+                .Where(c => c.ListenList == true && c.ApplicationUserId == user.Id &&
+                (c.Title.Contains(searchListenList) || c.Artist.Contains(searchListenList)))
                 .Include(c => c.CDGenres)
                 .ThenInclude(cg => cg.GenresForCDs);
                 return View(await cds.ToListAsync());
             }
-            
+
         }
 
 
@@ -99,12 +115,10 @@ namespace Shelved.Controllers
             else
             {
                 var cds = _context.CD
-                .Where(c => c.WishList == true && c.ApplicationUserId == user.Id
-                && c.Title.Contains(searchWishList)
-                || c.WishList == true && c.ApplicationUserId == user.Id
-                && c.Artist.Contains(searchWishList))
-                .Include(c => c.CDGenres)
-                .ThenInclude(cg => cg.GenresForCDs);
+                .Where(c => c.WishList == true && c.ApplicationUserId == user.Id &&
+                (c.Title.Contains(searchWishList) || c.Artist.Contains(searchWishList)))
+                    .Include(c => c.CDGenres)
+                         .ThenInclude(cg => cg.GenresForCDs);
                 return View(await cds.ToListAsync());
             }
         }
@@ -126,12 +140,10 @@ namespace Shelved.Controllers
             else
             {
                 var cds = _context.CD
-                .Where(c => c.HeardList == true && c.ApplicationUserId == user.Id
-                && c.Title.Contains(searchHeardList)
-                || c.HeardList == true && c.ApplicationUserId == user.Id
-                && c.Artist.Contains(searchHeardList))
-                .Include(c => c.CDGenres)
-                .ThenInclude(cg => cg.GenresForCDs);
+                .Where(c => c.HeardList == true && c.ApplicationUserId == user.Id &&
+                (c.Title.Contains(searchHeardList) || c.Artist.Contains(searchHeardList)))
+                    .Include(c => c.CDGenres)
+                        .ThenInclude(cg => cg.GenresForCDs);
                 return View(await cds.ToListAsync());
             }
         }
