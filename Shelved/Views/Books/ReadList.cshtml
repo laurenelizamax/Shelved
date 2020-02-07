@@ -4,12 +4,29 @@
     ViewData["Title"] = "ReadList";
 }
 
-<h1>Books To Read</h1>
+    <body>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <img src="~/images//books.jpg" alt="books" style="max-height: 90px; min-height: 80px;">  &nbsp;
 
-<a asp-action="ReadList">Books To Read</a> |
-<a asp-action="WishList">Wish List</a> |
-<a asp-action="ReadItList">I've Read That</a> |
-<a asp-action="Index">Back to My Books</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Books" asp-action="ReadList">Books To Read</a>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="WishList">WishList</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="ReadItList">I've Read That</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">My Books</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </body>
 
 <form asp-action="ReadList" asp-controller="Books">
     <label>Search Read List by Title or Author: </label>
