@@ -11,7 +11,7 @@
 
 <a asp-action="Index">My Books</a> |
 <a asp-action="WishList">Wish List</a> |
-<a asp-action="ReadList">Read List</a> |
+<a asp-action="ReadList">Books To Read</a> |
 <a asp-action="ReadItList">I've Read That</a>
 
 <form method="get" class="form-inline">
@@ -82,7 +82,7 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Book Details</a>
                 </td>
             </tr>
         }

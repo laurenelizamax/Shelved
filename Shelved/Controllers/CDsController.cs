@@ -45,7 +45,7 @@ namespace Shelved.Controllers
 
 
                 var model = await PagingList.CreateAsync(
-                             cds, 5, page, sortBy, "Title");
+                             cds, 10, page, sortBy, "Title");
 
                 model.RouteValue = new RouteValueDictionary {
                     { "searchBooks", searchMusic}

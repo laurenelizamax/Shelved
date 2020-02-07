@@ -8,7 +8,7 @@
 <h1>WishList</h1>
 
 <a asp-action="WishList">Wish List</a> |
-<a asp-action="ReadList">Read List</a> |
+<a asp-action="ReadList">Books To Read</a> |
 <a asp-action="ReadItList">I've Read That</a> |
 <a asp-action="Index">Back to My Books</a>
 
@@ -73,7 +73,7 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Book Details</a>
                 </td>
             </tr>
         }
