@@ -4,40 +4,54 @@
     ViewData["Title"] = "ReadList";
 }
 
-    <body>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                @*Photo by Jaredd Craig on Unsplash*@
-                <img src="~/images//books.jpg" alt="books" style="max-height: 90px; min-height: 80px;">  &nbsp;
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            @*Photo by Jaredd Craig on Unsplash*@
+            @*<img src="~/images//books.jpg" alt="books" style="max-height: 90px; min-height: 80px;">  &nbsp;*@
 
-                <a class="navbar-brand" asp-area="" asp-controller="Books" asp-action="ReadList">Books To Read</a>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="navbar-brand" asp-area="" asp-controller="Books" asp-action="ReadList">Books To Read</a>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="WishList">WishList</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="ReadItList">I've Read That</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">My Books</a>
-                        </li>
-                    </ul>
-                </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="WishList">WishList</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="ReadItList">I've Read That</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">My Books</a>
+                    </li> &nbsp;
+                    <li class="nav-item">
+                        <form asp-action="ReadList" asp-controller="Books">
+                            <label></label>
+                            <input name="searchReadLists" type="text" placeholder="Search by Title or Author" />
+                            <input class="btn btn-outline-dark" type="submit" value="Search" />
+                        </form>
+                    </li> &nbsp; &nbsp; &nbsp;
+                    <li class="nav-item">
+                        <p>
+                            <a class="btn btn-outline-danger" asp-action="Create">Add A Book</a>
+                        </p>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </body>
+        </div>
+    </nav>
+</body>
 
-<form asp-action="ReadList" asp-controller="Books">
-    <label>Search Read List by Title or Author: </label>
-    <input name="searchReadLists" type="text" />
-    <input class="btn btn-success" type="submit" value="Search" />
-</form>
+<div>
+    <div style="text-align: center">
+        <img align="center" src="~/images//books1.jpg" alt="books" style="max-height: 300px; min-height: 200px; max-width:1200px; min-width:1000px;">  &nbsp;
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+</div>
+
+
+
 <table class="table">
     <thead>
         <tr>
@@ -90,7 +104,7 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Book Details</a>
+                    <a class="btn btn-outline-danger" asp-action="Details" asp-route-id="@item.Id">Details</a>
                 </td>
             </tr>
         }

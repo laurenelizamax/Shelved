@@ -1,4 +1,5 @@
-﻿@model ReflectionIT.Mvc.Paging.PagingList<Shelved.Models.Book>
+﻿
+@model ReflectionIT.Mvc.Paging.PagingList<Shelved.Models.Book>
 @using ReflectionIT.Mvc.Paging
 @addTagHelper *, ReflectionIT.Mvc.Paging
 
@@ -30,12 +31,12 @@
                         <form method="get" class="form-inline">
                             <label></label>
                             <input name="searchBooks" class="form-control" placeholder="Search by Title or Author"
-                                   value="@Model.RouteValue["searchBooks"]" /> &nbsp; &nbsp;
+                                   value="@Model.RouteValue["searchBooks"]" /> &nbsp;
                             <button type="submit" class="btn btn-outline-dark">
                                 <a class="glyphicon glyphicon-search" aria-hidden="true"> Search</a>
                             </button>
                         </form>
-                    </li> &nbsp; &nbsp;
+                    </li> &nbsp; &nbsp; &nbsp;
                     <li class="nav-item">
                         <div>
                             <a class="btn btn-outline-danger" asp-action="Create">Add A Book</a>
@@ -120,6 +121,7 @@
         }
     </tbody>
 </table>
+
 <nav aria-label="Books">
-    <vc:pager paging-list="@Model" />
+        <vc:pager paging-list="@Model" />
 </nav>
