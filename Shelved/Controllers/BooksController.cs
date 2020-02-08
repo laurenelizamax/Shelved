@@ -298,7 +298,7 @@ namespace Shelved.Controllers
         // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds,MyBooks,ReadList,WishList,ReadItList")] BookViewModel bookViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds,MyBooks,ReadList,WishList,ReadItList,File")] BookViewModel bookViewModel)
         {
             var user = await GetCurrentUserAsync();
 
@@ -306,6 +306,7 @@ namespace Shelved.Controllers
             {
                 return NotFound();
             }
+
 
             if (ModelState.IsValid)
             {
@@ -331,6 +332,18 @@ namespace Shelved.Controllers
                     BookId = bookViewModel.Id,
                     GenreId = gid
                 }).ToList();
+
+                if (bookViewModel.File != null && bookViewModel.File.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetFileName(bookViewModel.File.FileName); //getting path of actual file name
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName); //creating path combining file name w/ www.root\\images directory
+                    using (var fileSteam = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path
+                    {
+                        await bookViewModel.File.CopyToAsync(fileSteam);
+                    }
+                    bookModel.ImagePath = fileName;
+
+                }
 
                 try
                 {
