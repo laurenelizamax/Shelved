@@ -4,6 +4,8 @@
     ViewData["Title"] = "Details";
 }
 
+<br />
+
 <h3>Book Details</h3>
 
 <br />
@@ -51,10 +53,6 @@
                 </div>
             }
         </dd>
-        @*<dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ImagePath)
-            </dt>*@
-
 
     </dl>
 
@@ -64,8 +62,4 @@
     <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
     <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
     <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Index">Back to My Books</a>
-
-    @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit This Book</a> |
-        <a asp-action="Delete" asp-route-id="@Model.Id">Delete This Book</a> |
-        <a asp-action="Index">Back to My Books</a>*@
 </div>

@@ -17,7 +17,7 @@ namespace Shelved.Models
         public string Artist { get; set; }
         public string Year { get; set; }
 
-        [Display(Name = "I've Heard This")]
+        [Display(Name = "Heard")]
         public bool IsHeard { get; set; }
 
         [Display(Name = "Album Cover")]

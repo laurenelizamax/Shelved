@@ -4,7 +4,16 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Movie Details</h1>
+<br />
+
+<h3>Movie Details</h3>
+
+<br />
+
+<div>
+    <img style="max-height: 250px; min-height: 100px; max-width:200px; min-width:100px;" class="img-responsive bookImage" src="@Url.Content("~/images/" + Model.ImagePath)" alt="" />
+</div>
+<br />
 
 <div>
     <hr />
@@ -28,32 +37,19 @@
             @Html.DisplayFor(model => model.IsWatched)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd class="col-sm-10">
-            <img style="max-height: 120px; min-height: 100px;" class="img-responsive bookImage" src="@Url.Content("~/images/" + Model.ImagePath)" alt="" />
-        </dd>
-
-        <dt lass="col-sm-2">
             Genres
         </dt>
-        <dd>
-            <br>
-
+        <dd class="col-sm-10">
             @foreach (var item in Model.MovieGenres)
             {
-                <li class="col-sm-10">
-
-                    @Html.DisplayFor(modelItem => item.GenresForMovies.Description)
-
-                </li>
-                <br>
+                <div>
+                    @Html.DisplayFor(modelItem => item.GenresForMovies.Description) &nbsp;
+                </div>
             }
-        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit This Movie</a> |
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete This Movie</a> |
-    <a asp-action="Index">Back to My Movies</a>
+    <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Edit" asp-route-id="@Model.Id">Edit This Movie</a>
+    <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Delete" asp-route-id="@Model.Id">Delete This Movie</a>
+    <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Index">Back to My Movies</a>
 </div>
