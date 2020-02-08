@@ -10,6 +10,7 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
+            @*Photo by Jaredd Craig on Unsplash*@
             <img src="~/images//books.jpg" alt="books" style="max-height: 90px; min-height: 80px;">  &nbsp;
 
             <a class="navbar-brand" asp-area="" asp-controller="Books" asp-action="Index">My Books</a>
@@ -33,21 +34,24 @@
 
 
 <form method="get" class="form-inline">
-    <label>Search Books by Title or Author: </label>
-    <input name="searchBooks" class="form-control" placeholder="Search Your Books"
-           value="@Model.RouteValue["searchBooks"]" />
-    <button type="submit" class="btn btn-info">
+    <label></label>
+    <input name="searchBooks" class="form-control" placeholder="Search by Title or Author"
+           value="@Model.RouteValue["searchBooks"]" /> &nbsp;
+    <button type="submit" class="btn btn-outline-dark">
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
     </button>
 </form>
+
+
+<div>
+    <a class="btn btn-outline-danger mt-3 btn-create-new-group" asp-action="Create">Add A Book</a>
+</div>
+<br />
 
 <nav aria-label="Books">
     @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
 </nav>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -75,34 +79,36 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Author)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsRead)
-                </td>
-                <td>
-                    <img style="max-height: 60px; min-height: 60px;" class="img-responsive bookImage" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
-                </td>
-                <td>
-                    @foreach (var genre in item.BookGenres)
-                    {
-                        <div>
-                            @Html.DisplayFor(modelItem => genre.GenresForBooks.Description)
-                        </div>
-                    }
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Book Details</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsRead)
+            </td>
+            <td>
+                <img style="max-height: 60px; min-height: 60px;" class="img-responsive bookImage" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
+            </td>
+            <td>
+                @foreach (var genre in item.BookGenres)
+                {
+                    <div>
+                        @Html.DisplayFor(modelItem => genre.GenresForBooks.Description)
+                    </div>
+                }
+            </td>
+            <td>
+                <div>
+                    <a class="btn btn-outline-danger mt-3 btn-create-new-group" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </div>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
