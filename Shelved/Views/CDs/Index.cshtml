@@ -10,14 +10,15 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <img src="~/images//music2.jpg" alt="cds" style="max-height: 90px; min-height: 80px;">  &nbsp;
+            @*Photo by israel palacio on Unsplash*@
+            @*<img src="~/images//music2.jpg" alt="cds" style="max-height: 90px; min-height: 80px;">  &nbsp;*@
 
             <a class="navbar-brand" asp-area="" asp-controller="CDs" asp-action="Index">My Music</a>
 
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="CDs" asp-action="WishList">WishList</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="CDs" asp-action="WishList">Wish List</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="CDs" asp-action="ListenList">Listen List</a>
@@ -25,28 +26,41 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="CDs" asp-action="HeardList">I've Heard That</a>
                     </li>
+                    <li class="nav-item">
+                        <form method="get" class="form-inline">
+                            <label></label>
+                            <input name="searchMusic" class="form-control" placeholder="Search by Album or Artist"
+                                   value="@Model.RouteValue["searchMusic"]" /> &nbsp; &nbsp;
+                            <button type="submit" class="btn btn-outline-dark">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+                            </button>
+                        </form>
+                    </li>  &nbsp; &nbsp;
+                    <li class="nav-item">
+                        <p>
+                            <a class="btn btn-outline-danger" asp-action="Create">Add An Album</a>
+                        </p>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 </body>
 
-<form method="get" class="form-inline">
-    <label>Search Music by Title or Artist: </label>
-    <input name="searchMusic" class="form-control" placeholder="Search Your Music"
-           value="@Model.RouteValue["searchMusic"]" />
-    <button type="submit" class="btn btn-info">
-        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
-    </button>
-</form>
+
+
+<div>
+    <div style="text-align: center">
+        <img align="center" src="~/images//music3.jpg" alt="books" style="max-height: 300px; min-height: 200px; max-width:1200px; min-width:1000px;">  &nbsp;
+    </div>
+
+</div>
 
 <nav aria-label="CDs">
     @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
 </nav>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -98,7 +112,7 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">CD Details</a>
+                    <a class="btn btn-outline-danger mt-3 btn-create-new-group" asp-action="Details" asp-route-id="@item.Id">Details</a>
                 </td>
             </tr>
         }

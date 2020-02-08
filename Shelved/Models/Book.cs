@@ -18,7 +18,7 @@ namespace Shelved.Models
         public string Author { get; set; }
         public string Year { get; set; }
 
-        [Display(Name = "I've Read This")]
+        [Display(Name = "Read")]
         public bool IsRead { get; set; }
 
         [Display(Name = "Book Cover")]

@@ -16,7 +16,7 @@ namespace Shelved.Models
         public ApplicationUser ApplicationUser { get; set; }
         public string Year { get; set; }
 
-        [Display(Name = "I've Watched This")]
+        [Display(Name = "Watched")]
         public bool IsWatched { get; set; }
 
         [Display(Name = "Movie Cover")]

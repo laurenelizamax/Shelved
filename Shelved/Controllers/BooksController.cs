@@ -214,7 +214,6 @@ namespace Shelved.Controllers
                     Author = bookViewModel.Author,
                     Year = bookViewModel.Year,
                     IsRead = bookViewModel.IsRead,
-                    //ImagePath = bookViewModel.ImagePath,
                     ApplicationUserId = user.Id,
                     MyBooks = bookViewModel.MyBooks,
                     ReadList = bookViewModel.ReadList,
@@ -281,6 +280,7 @@ namespace Shelved.Controllers
                 Year = book.Year,
                 IsRead = book.IsRead,
                 File = book.File,
+                ImagePath = book.ImagePath,
                 ApplicationUserId = user.Id,
                 MyBooks = book.MyBooks,
                 ReadList = book.ReadList,
@@ -298,7 +298,7 @@ namespace Shelved.Controllers
         // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds,MyBooks,ReadList,WishList,ReadItList")] BookViewModel bookViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Author,Year,IsRead,ImagePath,GenreIds,MyBooks,ReadList,WishList,ReadItList,File")] BookViewModel bookViewModel, IFormFile file)
         {
             var user = await GetCurrentUserAsync();
 
@@ -306,6 +306,7 @@ namespace Shelved.Controllers
             {
                 return NotFound();
             }
+
 
             if (ModelState.IsValid)
             {
@@ -319,12 +320,12 @@ namespace Shelved.Controllers
                 bookModel.Year = bookViewModel.Year;
                 bookModel.IsRead = bookViewModel.IsRead;
                 bookModel.File = bookViewModel.File;
+                bookModel.ImagePath = bookViewModel.ImagePath;
                 bookModel.ApplicationUserId = user.Id;
                 bookModel.ReadItList = bookViewModel.ReadItList;
                 bookModel.WishList = bookViewModel.WishList;
                 bookModel.MyBooks = bookViewModel.MyBooks;
                 bookModel.ReadList = bookViewModel.ReadList;
-
 
                 bookModel.BookGenres = bookViewModel.GenreIds.Select(gid => new BookGenre
                 {
@@ -334,6 +335,16 @@ namespace Shelved.Controllers
 
                 try
                 {
+                    if (bookModel.File != null && bookModel.File.Length > 0)
+                    {
+                        var fileName = Guid.NewGuid().ToString() + Path.GetFileName(bookViewModel.File.FileName); //getting path of actual file name
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName); //creating path combining file name w/ www.root\\images directory
+                        using (var fileSteam = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path
+                        {
+                            await bookModel.File.CopyToAsync(fileSteam);
+                        }
+                        bookModel.ImagePath = fileName;
+                    }
                     _context.Update(bookModel);
                     await _context.SaveChangesAsync();
                 }

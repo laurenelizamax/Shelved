@@ -4,11 +4,20 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Book Details</h1>
+<br />
+
+<h3>Book Details</h3>
+
+<br />
+
 
 <div>
-    <hr />
+    <img style="max-height: 250px; min-height: 100px; max-width:200px; min-width:100px;" class="img-responsive bookImage" src="@Url.Content("~/images/" + Model.ImagePath)" alt="" />
+</div>
+<br />
+<div>
     <dl class="row">
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
@@ -34,27 +43,23 @@
             @Html.DisplayFor(model => model.IsRead)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
+            Genres
         </dt>
         <dd class="col-sm-10">
-            <img style="max-height: 120px; min-height: 100px;" class="img-responsive bookImage" src="@Url.Content("~/images/" + Model.ImagePath)" alt="" />
-        </dd>
-        <h6>
-            Genres
-        </h6>
-        <td>
             @foreach (var item in Model.BookGenres)
             {
                 <div>
-                    @Html.DisplayFor(modelItem => item.GenresForBooks.Description)
+                    @Html.DisplayFor(modelItem => item.GenresForBooks.Description) &nbsp;
                 </div>
             }
-        </td>
+        </dd>
+
     </dl>
 
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit This Book</a> |
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete This Book</a> |
-    <a asp-action="Index">Back to My Books</a>
+    <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Index">Back to My Books</a>
 </div>
