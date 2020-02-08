@@ -26,12 +26,14 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">My Books</a>
                     </li> &nbsp;
                     <li class="nav-item">
-                        <form asp-action="ReadList" asp-controller="Books">
+                        <form method="get" class="form-inline" asp-action="ReadList" asp-controller="Books">
                             <label></label>
-                            <input name="searchReadLists" type="text" placeholder="Search by Title or Author" />
-                            <input class="btn btn-outline-dark" type="submit" value="Search" />
+                            <input name="searchReadList" class="form-control" placeholder="Search by Title or Author" /> &nbsp;
+                            <button type="submit" class="btn btn-outline-dark">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+                            </button>
                         </form>
-                    </li> &nbsp; &nbsp; &nbsp;
+                    </li> &nbsp; &nbsp;
                     <li class="nav-item">
                         <p>
                             <a class="btn btn-outline-danger" asp-action="Create">Add A Book</a>
