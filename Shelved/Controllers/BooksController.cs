@@ -350,7 +350,6 @@ namespace Shelved.Controllers
                 bookModel.Year = bookViewModel.Year;
                 bookModel.IsRead = bookViewModel.IsRead;
                 bookModel.File = bookViewModel.File;
-                bookModel.ImagePath = bookViewModel.ImagePath;
                 bookModel.ApplicationUserId = user.Id;
                 bookModel.ReadItList = bookViewModel.ReadItList;
                 bookModel.WishList = bookViewModel.WishList;
