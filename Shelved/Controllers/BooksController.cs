@@ -365,16 +365,21 @@ namespace Shelved.Controllers
 
                 try
                 {
-                    if (bookModel.File != null && bookModel.File.Length > 0)
+                    if (bookViewModel.File != null && bookViewModel.File.Length > 0)
                     {
-                        var fileName = Guid.NewGuid().ToString() + Path.GetFileName(bookViewModel.File.FileName); //getting path of actual file name
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName); //creating path combining file name w/ www.root\\images directory
-                        using (var fileSteam = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path
+                        var fileName = Path.GetFileName(bookViewModel.File.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path 
                         {
-                            await bookModel.File.CopyToAsync(fileSteam);
+                            await bookViewModel.File.CopyToAsync(fileStream);
                         }
                         bookModel.ImagePath = fileName;
                     }
+                    else
+                    {
+                        bookModel.ImagePath = _context.Book.AsNoTracking().Single<Book>(b => b.Id == bookViewModel.Id).ImagePath;
+                    }
+
                     _context.Update(bookModel);
                     await _context.SaveChangesAsync();
                 }

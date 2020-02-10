@@ -264,6 +264,7 @@ namespace Shelved.Controllers
                 Year = movie.Year,
                 IsWatched = movie.IsWatched,
                 File = movie.File,
+                ImagePath = movie.ImagePath,
                 ApplicationUserId = user.Id,
                 MyMovies = movie.MyMovies,
                 WatchList = movie.WatchList,
@@ -281,7 +282,7 @@ namespace Shelved.Controllers
         // POST: Movies/Edit/5       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds,MyMovies,SeenList,WatchList,WishList")] MovieViewModel movieViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Year,IsWatched,ImagePath,GenreIds,MyMovies,SeenList,WatchList,WishList,File")] MovieViewModel movieViewModel, IFormFile file)
         {
             var user = await GetCurrentUserAsync();
 
@@ -301,6 +302,7 @@ namespace Shelved.Controllers
                 movieModel.Year = movieViewModel.Year;
                 movieModel.IsWatched = movieViewModel.IsWatched;
                 movieModel.File = movieViewModel.File;
+                movieModel.ImagePath = movieViewModel.ImagePath;
                 movieModel.ApplicationUserId = user.Id;
                 movieModel.MyMovies = movieViewModel.MyMovies;
                 movieModel.WatchList = movieViewModel.WatchList;
@@ -315,6 +317,21 @@ namespace Shelved.Controllers
 
                 try
                 {
+                    if (movieViewModel.File != null && movieViewModel.File.Length > 0)
+                    {
+                        var fileName = Path.GetFileName(movieViewModel.File.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path 
+                        {
+                            await movieViewModel.File.CopyToAsync(fileStream);
+                        }
+                        movieModel.ImagePath = fileName;
+                    }
+                    else
+                    {
+                        movieModel.ImagePath = _context.Movie.AsNoTracking().Single<Movie>(b => b.Id == movieViewModel.Id).ImagePath;
+                    }
+
                     _context.Update(movieModel);
                     await _context.SaveChangesAsync();
                 }

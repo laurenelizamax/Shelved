@@ -267,6 +267,7 @@ namespace Shelved.Controllers
                 Year = cD.Year,
                 IsHeard = cD.IsHeard,
                 File = cD.File,
+                ImagePath = cD.ImagePath,
                 ApplicationUserId = user.Id,
                 MyMusic = cD.MyMusic,
                 ListenList = cD.ListenList,
@@ -284,7 +285,7 @@ namespace Shelved.Controllers
         // POST: CDs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds,MyMusic,ListenList,HeardList,WishList")] CDViewModel cDViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ApplicationUserId,Artist,Year,IsHeard,ImagePath,GenreIds,MyMusic,ListenList,HeardList,WishList,File")] CDViewModel cDViewModel, IFormFile file)
         {
             var user = await GetCurrentUserAsync();
 
@@ -306,6 +307,7 @@ namespace Shelved.Controllers
                 cDModel.Year = cDViewModel.Year;
                 cDModel.IsHeard = cDViewModel.IsHeard;
                 cDModel.File = cDViewModel.File;
+                cDModel.ImagePath = cDViewModel.ImagePath;
                 cDModel.ApplicationUserId = user.Id;
                 cDModel.MyMusic = cDViewModel.MyMusic;
                 cDModel.ListenList = cDViewModel.ListenList;
@@ -321,6 +323,21 @@ namespace Shelved.Controllers
 
                 try
                 {
+                    if (cDViewModel.File != null && cDViewModel.File.Length > 0)
+                    {
+                        var fileName = Path.GetFileName(cDViewModel.File.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create)) //using filestream to get the actual path 
+                        {
+                            await cDViewModel.File.CopyToAsync(fileStream);
+                        }
+                        cDModel.ImagePath = fileName;
+                    }
+                    else
+                    {
+                        cDModel.ImagePath = _context.CD.AsNoTracking().Single<CD>(b => b.Id == cDViewModel.Id).ImagePath;
+                    }
+
                     _context.Update(cDModel);
                     await _context.SaveChangesAsync();
                 }
