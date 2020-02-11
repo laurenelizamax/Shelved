@@ -6,112 +6,103 @@
     ViewData["Title"] = "Index";
 }
 
-    <body>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                @*Photo by Joshua Eckstein on Unsplash*@
-                @*<img src="~/images//movies.jpg" alt="cds" style="max-height: 90px; min-height: 80px;">  &nbsp;*@
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            @*Photo by Joshua Eckstein on Unsplash*@
+            @*<img src="~/images//movies.jpg" alt="cds" style="max-height: 90px; min-height: 80px;">  &nbsp;*@
 
 
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="navbar-brand" asp-area="" asp-controller="Movies" asp-action="Index">My Movies</a>
-                            </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="WatchList">Watch List</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="WishList">Wish List</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="SeenList">I've Seen That</a>
-                        </li>
-                        <li class="nav-item">
-                            <form method="get" class="form-inline">
-                                <label></label>
-                                <input name="searchMovies" class="form-control" placeholder="Search by Title or Year"
-                                       value="@Model.RouteValue["searchMovies"]" /> &nbsp; &nbsp;
-                                <button type="submit" class="btn btn-outline-dark">
-                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
-                                </button>
-                            </form>
-                        </li> &nbsp; &nbsp;
-                        <li class="nav-item">
-                            <p>
-                                <a class="btn btn-outline-danger" asp-action="Create">Add A Movie</a>
-                            </p>
-                        </li>
-                    </ul>
-                </div>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="navbar-brand" asp-area="" asp-controller="Movies" asp-action="Index">My Movies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="WatchList">Watch List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="WishList">Wish List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="SeenList">I've Seen That</a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="get" class="form-inline">
+                            <label></label>
+                            <input name="searchMovies" class="form-control" placeholder="Search by Title or Year"
+                                   value="@Model.RouteValue["searchMovies"]" /> &nbsp; &nbsp;
+                            <button type="submit" class="btn btn-outline-dark">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+                            </button>
+                        </form>
+                    </li> &nbsp; &nbsp;
+                    <li class="nav-item">
+                        <p>
+                            <a class="btn btn-outline-danger" asp-action="Create">Add A Movie</a>
+                        </p>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </body>
-
-    <div>
-        <div style="text-align: center">
-            <img align="center" src="~/images//moviebw.jpg" alt="movies" style="max-height: 300px; min-height: 200px; max-width:1200px; min-width:1000px;">  &nbsp;
         </div>
+    </nav>
+</body>
 
+<div>
+    <div style="text-align: center">
+        <img align="center" src="~/images//moviebw.jpg" alt="movies" style="max-height: 300px; min-height: 200px; max-width:1200px; min-width:1000px;">  &nbsp;
     </div>
+
+</div>
 
 <nav aria-label="Movies">
     @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
 </nav>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsWatched)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImagePath)
-            </th>
-            <th>
-                Genres
-            </th>
-        </tr>
-    </thead>
-    <tbody>
+<br />
+<div class="container">
+    <div class="row row-cols-4">
+
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsWatched)
-                </td>
-                <td>
-                    <img style="max-height: 70px; min-height: 60px;" class="img-responsive" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
-                </td>
-                <td>
-                    @foreach (var genre in item.MovieGenres)
-                    {
-                        <div>
-                            @Html.DisplayFor(modelItem => genre.GenresForMovies.Description)
-                        </div>
-                    }
-                </td>
-                <td>
-                    <a  class="btn btn-outline-danger" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <div class="card" style="width: 16rem;">
+                <div class="card-body">
+                    <h5 class="card-title">
 
+                        @Html.DisplayFor(modelItem => item.Title)
+
+                    </h5>
+                    <div>
+                        <img style="max-height: 140px; min-height: 120px;" class="img-responsive" src="@Url.Content("~/images/" + item.ImagePath)" alt="" /> &nbsp;
+                        <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+                    </div>
+                    &nbsp; &nbsp;
+
+                    <p class="card-text">
+                        Published:
+                        @Html.DisplayFor(modelItem => item.Year)
+                    </p>
+                    <p class="card-text">
+                        @Html.DisplayNameFor(model => model.IsWatched)
+                        @Html.DisplayFor(modelItem => item.IsWatched)
+                    </p>
+                    <p class="card-text">
+                        Genres:
+
+                        @foreach (var genre in item.MovieGenres)
+                        {
+                            @Html.DisplayFor(modelItem => genre.GenresForMovies.Description) <br />
+                        } &nbsp;
+                    </p>
+
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
 </table>
 <nav aria-label="Movies">
     <vc:pager paging-list="@Model" />
