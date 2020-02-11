@@ -33,7 +33,7 @@
                                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
                             </button>
                         </form>
-                    </li> &nbsp; &nbsp; 
+                    </li> &nbsp; &nbsp;
                     <li class="nav-item">
                         <p>
                             <a class="btn btn-outline-danger" asp-action="Create">Add An Album</a>
@@ -52,63 +52,51 @@
 
 </div>
 
+<br />
+<br />
+<div class="container">
+    <div class="row row-cols-4">
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Artist)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsHeard)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImagePath)
-            </th>
-            <th>
-                Genres
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Artist)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsHeard)
-                </td>
-                <td>
-                    <img style="max-height: 70px; min-height: 60px;" class="img-responsive bookImage" src="@Url.Content("~/images/" + item.ImagePath)" alt="" />
-                </td>
-                <td>
-                    @foreach (var genre in item.CDGenres)
-                    {
-                        <div>
-                            @Html.DisplayFor(modelItem => genre.GenresForCDs.Description)
-                        </div>
-                    }
-                </td>
-                <td>
-                    <a  class="btn btn-outline-danger" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                </td>
-            </tr>
+            <div class="card" style="width: 16rem;">
+                <div class="card-body">
+                    <h5 class="card-title">
+
+                        @Html.DisplayFor(modelItem => item.Title)
+
+                    </h5>
+                    <p class="card-text">
+                        By:
+                        @Html.DisplayFor(modelItem => item.Artist)
+                    </p>
+                    <div>
+                        <img style="max-height: 140px; min-height: 120px;" class="img-responsive" src="@Url.Content("~/images/" + item.ImagePath)" alt="" /> &nbsp;
+                        <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+                    </div>
+                    &nbsp; &nbsp;
+
+                    <p class="card-text">
+                        Published:
+                        @Html.DisplayFor(modelItem => item.Year)
+                    </p>
+                    <p class="card-text">
+                        @Html.DisplayNameFor(model => model.IsHeard)
+                        @Html.DisplayFor(modelItem => item.IsHeard)
+                    </p>
+                    <p class="card-text">
+                        Genres:
+
+                        @foreach (var genre in item.CDGenres)
+                        {
+                            @Html.DisplayFor(modelItem => genre.GenresForCDs.Description) <br />
+                        } &nbsp;
+                    </p>
+
+
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>

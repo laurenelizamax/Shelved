@@ -81,3 +81,6 @@ body {
     margin-right: auto;
     width: 50%;
 }
+.container {
+    margin: 10px 10px 10px 10px;
+}
