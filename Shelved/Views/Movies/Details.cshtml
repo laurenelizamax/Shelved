@@ -4,7 +4,8 @@
     ViewData["Title"] = "Details";
 }
 
-    <div class="card" style="width: 40rem;">
+<div class="detailsCard">
+    <div class="card">
         <div class="card-body">
             <h3 class="card-title">
                 @Html.DisplayFor(model => model.Title)
@@ -46,5 +47,6 @@
                 <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
                 <a class="btn btn-outline-dark mt-3 btn-create-new-group" asp-action="Index">Back to My Movies</a>
             </div>
-            </div>
         </div>
+    </div>
+    </div>

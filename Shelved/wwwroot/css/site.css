@@ -1,6 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-<link href="https://fonts.googleapis.com/css?family=Taviraj&display=swap" rel="stylesheet" >
+
+
 
 a.navbar-brand {
     white-space: normal;
@@ -71,10 +72,7 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
-.bookImage {
-    max-height: 60px;
-    max-width: 40px;
-}
+
 .center {
     display: block;
     margin-left: auto;
@@ -82,5 +80,29 @@ body {
     width: 50%;
 }
 .container {
-    margin: 10px 10px 10px 10px;
+    margin-bottom: 40px;
+}
+
+h1, h2, h3, h4, h5, h6, p, ol, ul, dl, dt, dd, button, input {
+    font-family: 'Raleway', sans-serif !important;
+}
+.indexCard {
+    margin-top: 20px;
+    height:auto;
+    width:auto;
+
+}
+
+.detailsCard
+{
+    height:auto;
+    align-content: center;
+    width: 600px;
+    margin-bottom: 80px;
+}
+
+.wishListCard {
+    margin-top: 20px;
+    height: 400px;
+    width: 300px;
 }
