@@ -31,36 +31,8 @@ namespace Shelved.Controllers
             _userManager = userManager;
         }
 
-        //public async Task<IActionResult> Index(int page = 1, int pageSize = 2, string searchBooks = "Title")
-        //{
-        //    var user = await GetCurrentUserAsync();
-
-
-        //    if (string.IsNullOrWhiteSpace(searchBooks))
-        //    {
-        //        var books = _context.Book
-        //        .Where(b => b.MyBooks == true && b.ApplicationUserId == user.Id)
-        //         .Include(b => b.BookGenres)
-        //            .ThenInclude(bg => bg.GenresForBooks);
-
-        //        return View(await books.ToListAsync());
-        //    }
-        //    else
-        //    {
-        //        var books = _context.Book
-        //        .Where(b => b.WishList == true && b.ApplicationUserId == user.Id
-        //            && (b.Title.Contains(searchBooks) || b.Author.Contains(searchBooks)))
-        //                .Include(b => b.BookGenres)
-        //                     .ThenInclude(bg => bg.GenresForBooks);
-
-        //        return View(await books.ToListAsync());
-
-        //    }
-        //}
-
-
-
-
+ 
+        // Get All Books
         public async Task<IActionResult> Index(string searchBooks, int page = 1, string sortBy = "Title")
         {
             var user = await GetCurrentUserAsync();
