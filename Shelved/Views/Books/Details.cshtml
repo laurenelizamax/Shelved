@@ -5,7 +5,7 @@
 }
 
 
-<div class="card" style="width: 32rem;">
+<div class="card" style="width: 34rem;">
     <div class="card-body">
         <h3 class="card-title">
             @Html.DisplayFor(model => model.Title)
@@ -18,13 +18,13 @@
             <div>
                 <dl class="row">
                     <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Author)
+                        @Html.DisplayNameFor(model => model.Author):
                     </dt>
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.Author)
                     </dd>
                     <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Year)
+                        @Html.DisplayNameFor(model => model.Year):
                     </dt>
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.Year)
@@ -36,7 +36,7 @@
                         @Html.DisplayFor(model => model.IsRead)
                     </dd>
                     <dt class="col-sm-2">
-                        Genres
+                        Genres:
                     </dt>
                     <dd class="col-sm-10">
                         @foreach (var item in Model.BookGenres)
