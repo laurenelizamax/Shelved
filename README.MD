@@ -1,6 +1,6 @@
 # Shelved 
 ## A home library tracking app for Books, Movies and Music
-<img src="https://github.com/laurenelizamax/Shelved/blob/master/shelved.jpg" alt="shelved" width="700" height="400">
+<img src="https://github.com/laurenelizamax/Shelved/blob/master/shelvedShot.png" alt="shelved" width="700" height="400">
 
 ###  Shelved is a library app that let's users keep track of their Books, Movies, and Music by adding them to specific lists. User can add items to their list of owned items, WishList, Watch/Read/Listen List, and  Watched/Read/Heard List.
  NSS Back-End Capstone
