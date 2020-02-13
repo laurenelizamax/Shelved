@@ -109,6 +109,6 @@ h1, h2, h3, h4, h5, h6, p, ol, ul, dl, dt, dd, button, input {
 .jumbotron, jumbotron-fluid {
     background-image: url("../images/shelvedHomePage4.jpg");
     background-repeat: no-repeat;
-    height: 1000px;
-    width: auto;
+    height: 500px;
+    width: 1000px;
 }
