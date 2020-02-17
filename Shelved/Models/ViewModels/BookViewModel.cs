@@ -11,10 +11,16 @@ namespace Shelved.Models.ViewModels
     public class BookViewModel
     {
         public int Id { get; set; }
+
+        [Required]
         public string Title { get; set; }
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+
+        [Required]
         public string Author { get; set; }
+   
+        [Required]
         public string Year { get; set; }
 
         [Display(Name = "I've Read This")]

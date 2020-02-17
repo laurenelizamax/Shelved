@@ -12,10 +12,16 @@ namespace Shelved.Models
     public class Book
     {
         public int Id { get; set; }
+
+        [Required]
         public string Title { get; set; }
         public string  ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+
+        [Required]
         public string Author { get; set; }
+
+        [Required]
         public string Year { get; set; }
 
         [Display(Name = "Read")]
@@ -24,6 +30,7 @@ namespace Shelved.Models
         [Display(Name = "Book Cover")]
         public string ImagePath { get; set; }
 
+        [Required]
         [Display(Name = "Genres")]
         public List<BookGenre> BookGenres { get; set; }
 
